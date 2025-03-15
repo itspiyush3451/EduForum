@@ -41,7 +41,7 @@ const LoginPage = () => {
         <div className="w-full max-w-md">
           <form className="bg-gray-700 drop-shadow-md rounded-lg px-8 pt-6 pb-8 mb-4  ">
             <div className="flex items-center justify-center">
-              <svg
+              {/* <svg
                 width="147"
                 height="38"
                 viewBox="0 0 147 38"
@@ -125,7 +125,7 @@ const LoginPage = () => {
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
-              </svg>
+              </svg> */}
             </div>
             <div className="pt-4 text-3xl text-center text-white-100 mb-4">
               Login

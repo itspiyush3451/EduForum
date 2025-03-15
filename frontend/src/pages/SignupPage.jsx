@@ -47,7 +47,7 @@ const SignupPage = () => {
           onSubmit={handleSubmit}
           className="max-w-md mx-auto p-6 bg-gray-700 drop-shadow-md rounded-lg"
         >
-          <div className="flex items-center justify-center">
+          {/* <div className="flex items-center justify-center">
             <svg
               width="147"
               height="38"
@@ -133,7 +133,7 @@ const SignupPage = () => {
                 stroke-linejoin="round"
               />
             </svg>
-          </div>
+          </div> */}
           <h2 className="text-2xl font-bold mb-4 mt-4 text-center text-white-100">
             Sign Up
           </h2>

@@ -1,23 +1,19 @@
-
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import React from "react";
-import {jwtDecode} from 'jwt-decode';
-
-
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
 
   const decodeToken = () => {
-    const token = localStorage.getItem('token'); // Retrieve token from local storage
+    const token = localStorage.getItem("token"); // Retrieve token from local storage
     if (token) {
       const decoded = jwtDecode(token); // Decode the token
       if (decoded) {
         setUsername(decoded.username); // Set the username from the token
       }
-    }
-    else {
-      window.location.href = '/login';
+    } else {
+      window.location.href = "/login";
     }
   };
 
@@ -26,12 +22,12 @@ const Navbar = () => {
   }, []);
 
   const handleLogoClick = () => {
-    window.location.href = '/dashboard';
+    window.location.href = "/dashboard";
   };
   return (
     <nav className="bg-gray-700 w-auto font-poppins">
       <div className="container mx-auto flex items-center justify-between px-6 py-2">
-        <div className="flex items-center" onClick = {handleLogoClick}>
+        {/* <div className="flex items-center" onClick = {handleLogoClick}>
           <svg
             width="147"
             height="38"
@@ -117,7 +113,7 @@ const Navbar = () => {
               stroke-linejoin="round"
             />
           </svg>
-        </div>
+        </div> */}
 
         {/* Search bar in the center */}
         {/* <input
@@ -128,20 +124,36 @@ const Navbar = () => {
 
         {/* User profile and notification on the right */}
         <div className="flex items-center space-x-4 text-white-100">
-        {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+          {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
         </svg> */}
-        <div className = "border rounded"  >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-</svg>
-</div>
+          <div className="border rounded">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              />
+            </svg>
+          </div>
           <div className="font-bold text-white-100">{username}</div>
           <div className="font-bold text-white-100">
-            <button className="bg-red-500 rounded-md px-2 py-2 drop-shadow-sm"
-            onClick={() => {localStorage.removeItem('token');
-            window.location.href = '/login'}}
-            >Logout</button>
+            <button
+              className="bg-red-500 rounded-md px-2 py-2 drop-shadow-sm"
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+              }}
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -150,4 +162,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
