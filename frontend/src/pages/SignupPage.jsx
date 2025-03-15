@@ -47,8 +47,13 @@ const SignupPage = () => {
           onSubmit={handleSubmit}
           className="max-w-md mx-auto p-6 bg-gray-700 drop-shadow-md rounded-lg"
         >
+<<<<<<< HEAD
           {/* <div className="flex items-center justify-center">
             <svg
+=======
+          <div className="flex items-center justify-center">
+            {/* <svg
+>>>>>>> 66ee1d3601fc54faa26ea7de24049649a98e2003
               width="147"
               height="38"
               viewBox="0 0 147 38"
@@ -132,8 +137,13 @@ const SignupPage = () => {
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
+<<<<<<< HEAD
             </svg>
           </div> */}
+=======
+            </svg> */}
+          </div>
+>>>>>>> 66ee1d3601fc54faa26ea7de24049649a98e2003
           <h2 className="text-2xl font-bold mb-4 mt-4 text-center text-white-100">
             Sign Up
           </h2>
