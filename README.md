@@ -11,7 +11,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 -  **Settings Management**: Customizable user preferences
 -  **User Dashboard**: Personalized feed of notices, discussions, and more
 
-## 🛠️ Tech Stack
+##  Tech Stack
 ### Frontend
 - React.js (with Vite for optimization)
 - Tailwind CSS (for styling)
@@ -22,7 +22,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 - PostgreSQL (for database management)
 - JWT Authentication (for secure login)
 
-## 🔧 Installation Guide
+##  Installation Guide
 1. **Clone the repository**
    ```sh
    git clone https://github.com/itspiyush3451/EduForum.git
@@ -40,7 +40,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 
 
 
-## 🤝 Contribution
+##  Contribution
 Feel free to contribute by submitting a pull request. Make sure to follow best practices and add meaningful commits.
 
 ## 📄 License
