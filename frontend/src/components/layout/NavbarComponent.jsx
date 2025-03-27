@@ -27,13 +27,8 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-700 w-auto font-poppins">
       <div className="container mx-auto flex items-center justify-between px-6 py-2">
-<<<<<<< HEAD
         {/* <div className="flex items-center" onClick = {handleLogoClick}>
           <svg
-=======
-        <div className="flex items-center" onClick={handleLogoClick}>
-          {/* <svg
->>>>>>> 66ee1d3601fc54faa26ea7de24049649a98e2003
             width="147"
             height="38"
             viewBox="0 0 147 38"
@@ -50,7 +45,7 @@ const Navbar = () => {
               stroke="black"
               stroke-width="1.5"
               stroke-miterlimit="10"
-              stroke-linecap="round"
+              strokeLinecap="round"
               stroke-linejoin="round"
             />
             <path
@@ -117,13 +112,8 @@ const Navbar = () => {
               stroke-linecap="round"
               stroke-linejoin="round"
             />
-<<<<<<< HEAD
           </svg>
         </div> */}
-=======
-          </svg> */}
-        </div>
->>>>>>> 66ee1d3601fc54faa26ea7de24049649a98e2003
 
         {/* Search bar in the center */}
         {/* <input
