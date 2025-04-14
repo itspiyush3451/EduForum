@@ -32,7 +32,7 @@ EduForum is a comprehensive web-based platform designed to facilitate academic d
 - **Forum Discussions**: Create, read, update, and delete academic posts
 - **Comments System**: Interactive commenting on posts
 - **Department-based Filtering**: Posts and notices organized by departments
-- **File Attachments**: Support for file uploads in notices and posts
+- **File Attachments**: Support for file uploads in notices 
 
 ### Notice Management
 - **Centralized Noticeboard**: Department-specific notices
