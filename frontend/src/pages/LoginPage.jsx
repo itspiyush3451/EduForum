@@ -1,200 +1,324 @@
-import React, { useState } from "react";
+// LoginPage.jsx
+import React from "react";
 import Footer from "../components/layout/Footer";
+import EnhancedLoginForm from "../components/auth/LoginForm";
+import { motion } from "framer-motion";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleLogin = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // Clear input fields
-        setEmail("");
-        setPassword("");
-        // Clear error message if any
-        setError("");
-        localStorage.setItem("token", data.token);
-        window.location.href = "/dashboard";
-      } else {
-        setError(data.message);
-      }
-    } catch (error) {
-      console.error("Login failed:", error.message);
-      setError("Login failed. Please try again.");
-    }
-  };
+  const { loading } = useAuth();
 
   return (
-    <div className="bg-gray-800 font-poppins">
-      <div className="container mx-auto h-screen flex justify-center items-center">
-        <div className="w-full max-w-md">
-          <form className="bg-gray-700 drop-shadow-md rounded-lg px-8 pt-6 pb-8 mb-4  ">
-            <div className="flex items-center justify-center">
-              {/* <svg
-                width="147"
-                height="38"
-                viewBox="0 0 147 38"
+    <div className="bg-primary font-poppins min-h-screen flex flex-col">
+      {/* Subtle background animation */}
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-blue-900/20 blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-blue-700/10 blur-3xl" />
+      </div>
+
+      {/* Main content with two column layout */}
+      <div className="flex-1 flex relative z-10">
+        {/* Left column with illustration */}
+        <motion.div
+          className="hidden lg:flex lg:w-1/2 bg-blue-900/10 relative overflow-hidden"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center p-8">
+            <motion.div
+              className="relative w-full max-w-2xl"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              {/* SVG illustration */}
+              <svg
+                viewBox="0 0 600 500"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="w-full h-auto drop-shadow-lg"
               >
-                <rect y="4" width="30" height="30" rx="6" fill="#F7F7F7" />
+                {/* Background shapes */}
+                <circle
+                  cx="300"
+                  cy="250"
+                  r="200"
+                  fill="#094F8E"
+                  fillOpacity="0.1"
+                />
+                <circle
+                  cx="300"
+                  cy="250"
+                  r="150"
+                  fill="#1A62A2"
+                  fillOpacity="0.15"
+                />
+
+                {/* EdufLogo */}
                 <path
-                  d="M55.12 23.648H49V32H41.8V9.5H56.56L55.66 15.26H49V18.284H55.12V23.648ZM73.6502 25.556L74.1902 31.604C72.6782 32.228 70.7822 32.54 68.5022 32.54C66.2222 32.54 64.3862 32.3 62.9942 31.82C61.6262 31.34 60.5462 30.584 59.7542 29.552C58.9622 28.52 58.4102 27.308 58.0982 25.916C57.7862 24.524 57.6302 22.808 57.6302 20.768C57.6302 18.728 57.7862 17.012 58.0982 15.62C58.4102 14.204 58.9622 12.98 59.7542 11.948C61.2902 9.956 64.1102 8.96 68.2142 8.96C69.1262 8.96 70.1942 9.056 71.4182 9.248C72.6662 9.416 73.5902 9.632 74.1902 9.896L73.1102 15.404C71.5502 15.068 70.1222 14.9 68.8262 14.9C67.5302 14.9 66.6302 15.02 66.1262 15.26C65.6222 15.5 65.3702 15.98 65.3702 16.7V26.132C66.3062 26.324 67.2542 26.42 68.2142 26.42C70.2542 26.42 72.0662 26.132 73.6502 25.556ZM94.7242 32V24.044H89.3242V32H82.1242V9.5H89.3242V17.456H94.7242V9.5H101.924V32H94.7242ZM112.198 9.5V26.384H114.754C115.666 26.384 116.29 26.276 116.626 26.06C116.962 25.82 117.13 25.292 117.13 24.476V9.5H124.33V22.136C124.33 24.176 124.198 25.82 123.934 27.068C123.67 28.316 123.178 29.372 122.458 30.236C121.738 31.1 120.754 31.7 119.506 32.036C118.258 32.372 116.638 32.54 114.646 32.54C112.654 32.54 111.034 32.372 109.786 32.036C108.562 31.7 107.59 31.1 106.87 30.236C106.15 29.372 105.658 28.316 105.394 27.068C105.13 25.82 104.998 24.176 104.998 22.136V9.5H112.198ZM127.405 32V9.5H139.069C141.229 9.5 142.765 9.92 143.677 10.76C144.613 11.6 145.081 12.824 145.081 14.432C145.081 16.04 144.781 17.288 144.181 18.176C143.605 19.04 142.825 19.604 141.841 19.868V20.084C144.745 20.588 146.197 22.568 146.197 26.024C146.197 27.824 145.717 29.276 144.757 30.38C143.797 31.46 142.321 32 140.329 32H127.405ZM137.413 23.036H134.605V26.708H137.377C138.385 26.708 138.889 26.096 138.889 24.872C138.889 23.648 138.397 23.036 137.413 23.036ZM136.873 14.432H134.605V17.78H136.837C137.749 17.78 138.205 17.228 138.205 16.124C138.205 14.996 137.761 14.432 136.873 14.432Z"
-                  fill="#4A87FF"
+                  d="M200 150 H400 A10 10 0 0 1 410 160 V340 A10 10 0 0 1 400 350 H200 A10 10 0 0 1 190 340 V160 A10 10 0 0 1 200 150 Z"
+                  fill="#262D34"
+                  stroke="#3278B6"
+                  strokeWidth="2"
+                />
+
+                {/* Decorative elements */}
+                <rect
+                  x="210"
+                  y="180"
+                  width="180"
+                  height="20"
+                  rx="4"
+                  fill="#3278B6"
+                  fillOpacity="0.7"
+                />
+                <rect
+                  x="210"
+                  y="210"
+                  width="150"
+                  height="8"
+                  rx="4"
+                  fill="#5A94C8"
+                  fillOpacity="0.6"
+                />
+                <rect
+                  x="210"
+                  y="230"
+                  width="130"
+                  height="8"
+                  rx="4"
+                  fill="#5A94C8"
+                  fillOpacity="0.6"
+                />
+
+                {/* Chat bubbles */}
+                <circle cx="230" cy="280" r="20" fill="#094F8E" />
+                <rect
+                  x="260"
+                  y="265"
+                  width="100"
+                  height="30"
+                  rx="15"
+                  fill="#1A62A2"
+                />
+
+                <circle cx="230" cy="330" r="20" fill="#3278B6" />
+                <rect
+                  x="260"
+                  y="315"
+                  width="120"
+                  height="30"
+                  rx="15"
+                  fill="#5A94C8"
+                />
+
+                {/* People */}
+                <circle
+                  cx="100"
+                  cy="200"
+                  r="40"
+                  fill="#2C353D"
+                  stroke="#A7C3E1"
+                  strokeWidth="2"
+                />
+                <rect
+                  x="80"
+                  y="250"
+                  width="40"
+                  height="5"
+                  rx="2.5"
+                  fill="#A7C3E1"
+                />
+                <rect
+                  x="90"
+                  y="260"
+                  width="20"
+                  height="5"
+                  rx="2.5"
+                  fill="#A7C3E1"
+                />
+
+                <circle
+                  cx="500"
+                  cy="180"
+                  r="40"
+                  fill="#2C353D"
+                  stroke="#A7C3E1"
+                  strokeWidth="2"
+                />
+                <rect
+                  x="480"
+                  y="230"
+                  width="40"
+                  height="5"
+                  rx="2.5"
+                  fill="#A7C3E1"
+                />
+                <rect
+                  x="490"
+                  y="240"
+                  width="20"
+                  height="5"
+                  rx="2.5"
+                  fill="#A7C3E1"
+                />
+
+                <circle
+                  cx="150"
+                  cy="380"
+                  r="30"
+                  fill="#2C353D"
+                  stroke="#A7C3E1"
+                  strokeWidth="2"
+                />
+                <rect
+                  x="135"
+                  y="420"
+                  width="30"
+                  height="4"
+                  rx="2"
+                  fill="#A7C3E1"
+                />
+                <rect
+                  x="140"
+                  y="430"
+                  width="20"
+                  height="4"
+                  rx="2"
+                  fill="#A7C3E1"
+                />
+
+                <circle
+                  cx="450"
+                  cy="350"
+                  r="30"
+                  fill="#2C353D"
+                  stroke="#A7C3E1"
+                  strokeWidth="2"
+                />
+                <rect
+                  x="435"
+                  y="390"
+                  width="30"
+                  height="4"
+                  rx="2"
+                  fill="#A7C3E1"
+                />
+                <rect
+                  x="440"
+                  y="400"
+                  width="20"
+                  height="4"
+                  rx="2"
+                  fill="#A7C3E1"
+                />
+
+                {/* Connecting lines */}
+                <path
+                  d="M140 200 L190 200"
+                  stroke="#5A94C8"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
                 />
                 <path
-                  d="M15.37 8.68507L24.37 11.8644C24.72 11.988 25 12.3589 25 12.6857V15.6177C25 16.1035 24.55 16.5009 24 16.5009H6C5.45 16.5009 5 16.1035 5 15.6177V12.6857C5 12.3589 5.28 11.988 5.63 11.8644L14.63 8.68507C14.83 8.61442 15.17 8.61442 15.37 8.68507Z"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  d="M410 180 L460 180"
+                  stroke="#5A94C8"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
                 />
                 <path
-                  d="M25 26.2155H5V23.5661C5 23.0803 5.45 22.6829 6 22.6829H24C24.55 22.6829 25 23.0803 25 23.5661V26.2155Z"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  d="M170 350 L200 320"
+                  stroke="#5A94C8"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
                 />
                 <path
-                  d="M7 22.6829V16.5009"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  d="M400 320 L430 330"
+                  stroke="#5A94C8"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
                 />
-                <path
-                  d="M11 22.6829V16.5009"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M15 22.6829V16.5009"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M19 22.6829V16.5009"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M23 22.6829V16.5009"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M4 26.2155H26"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M15 14.293C15.8284 14.293 16.5 13.7 16.5 12.9683C16.5 12.2367 15.8284 11.6436 15 11.6436C14.1716 11.6436 13.5 12.2367 13.5 12.9683C13.5 13.7 14.1716 14.293 15 14.293Z"
-                  stroke="black"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg> */}
-            </div>
-            <div className="pt-4 text-3xl text-center text-white-100 mb-4">
-              Login
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-white-100 text-sm font-bold mb-2"
-                htmlFor="email"
-              >
-                Email
-              </label>
-              <input
-                className="shadow text-sm border-none rounded-lg w-full py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                className="block text-white-100 text-sm font-bold mb-2"
-                htmlFor="password"
-              >
-                Password
-              </label>
-              <input
-                className="shadow text-sm border-none rounded-lg w-full py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            {error && (
-              <p className="px-16 my-4 mx-9 text-red-500 justify-center items-center text-xs italic">
-                {error}
-              </p>
-            )}
-            <div className="flex items-center justify-between text-white-100">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-                onClick={handleLogin}
-              >
-                Sign In
-              </button>
-              <a
-                className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-                href="#"
-              >
-                Forgot Password?
-              </a>
-            </div>
-            <br />
-            <div className="flex items-center justify-center text-white-100">
-              <a
-                className="  justify-center font-bold text-sm text-blue-500 hover:text-blue-800 underline decoration-white"
-                href="/signup"
-              >
-                Not Registerd? Sign Up
-              </a>
-            </div>
-          </form>
-          <p className="text-center text-gray-500 text-xs">
-            <Footer />
-          </p>
+
+                {/* Title text */}
+                <text
+                  x="270"
+                  y="120"
+                  fontSize="24"
+                  fontWeight="bold"
+                  fill="#F7F7F7"
+                  textAnchor="middle"
+                >
+                  Edu
+                </text>
+                <text
+                  x="330"
+                  y="120"
+                  fontSize="24"
+                  fontWeight="bold"
+                  fill="#3278B6"
+                  textAnchor="middle"
+                >
+                  Forum
+                </text>
+              </svg>
+
+              {/* Text overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
+                <h2 className="text-blue-200 text-xl font-bold drop-shadow-md">
+                  Connect, Learn, Grow
+                </h2>
+                <p className="text-white-100 text-sm mt-2 opacity-80">
+                  Join thousands of students and educators in meaningful
+                  discussions
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Right column with login form */}
+        <div className="w-full lg:w-1/2 px-4 flex justify-center items-center">
+          <div className="w-full max-w-md">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="text-center mb-6">
+                <motion.div
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    delay: 0.2,
+                  }}
+                >
+                  <h1 className="text-3xl font-bold text-gradient">
+                    Welcome Back
+                  </h1>
+                  <p className="text-gray-400 mt-2">Sign in to your account</p>
+                </motion.div>
+              </div>
+
+              {loading ? (
+                <div className="flex justify-center items-center h-64">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+              ) : (
+                <EnhancedLoginForm />
+              )}
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10">
+        <div className="text-center text-gray-500 text-xs py-4">
+          <Footer />
         </div>
       </div>
     </div>

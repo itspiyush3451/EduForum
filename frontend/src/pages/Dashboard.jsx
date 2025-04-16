@@ -1,31 +1,17 @@
-import NavbarComponent from "../components/layout/NavbarComponent";
-import Footer from "../components/layout/Footer";
-import SidebarComponent from "../components/layout/SidebarComponent";
+import React from "react";
 import PostContainer from "../components/posts/PostContainer";
-import ChatbotComponent from "../components/chatbot/ChatbotComponent";
+// import ChatbotComponent from "../components/chatbot/ChatbotComponent";
 
 const Dashboard = () => {
   return (
-    <div className="font-poppins">
-      <div className="">
-        <NavbarComponent />
+    <div className="flex flex-col md:flex-row flex-1 gap-4">
+      <div className="w-full md:w-3/5 bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
+        <PostContainer />
       </div>
-      <div className="bg-gray-600 h-screen flex justify-start z-1">
-        <div className="sidebar w-1/5 drop-shadow-lg ml-4">
-          <div>
-            <SidebarComponent />
-          </div>
-        </div>
-        <div className="mt-4 mr-24 postsContainer w-3/5 flex justify-center bg-gray-800 rounded-lg drop-shadow-lg">
-          <PostContainer />
-        </div>
-        <div className="w-1/4 bg-gray-800 rounded-lg mt-4 mr-8">
-          <ChatbotComponent />
-        </div>
-      </div>
-      <p className="text-center text-gray-500 text-xs">
-        <Footer />
-      </p>
+      {/* Commented section for potential future chatbot implementation */}
+      {/* <div className="w-full md:w-1/4 mt-4 md:mt-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
+        <ChatbotComponent />
+      </div> */}
     </div>
   );
 };

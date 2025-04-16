@@ -1,29 +1,44 @@
-import NavbarComponent from "../components/layout/NavbarComponent";
-import SidebarComponent from "../components/layout/SidebarComponent";
-import MyPostsContainer from "../components/posts/MyPostsContainer";
-import ChatbotComponent from "../components/chatbot/ChatbotComponent";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import MyPostContainer from "../components/posts/MyPostsContainer";
 
+/**
+ * MyPosts component that wraps MyPostContainer with authentication checks
+ * Ensures only authenticated users can view their posts
+ */
 const MyPosts = () => {
-  return (
-    <div className="font-poppins">
-      <div className="">
-        <NavbarComponent />
+  const { user, isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate("/login", {
+        replace: true,
+        state: {
+          from: "/posts/my-posts",
+          message: "Please log in to view your posts",
+        },
+      });
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  // Show loading state while auth state is being determined
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
-      <div className="bg-gray-600 h-screen flex justify-start z-1">
-        <div className="sidebar w-1/5 drop-shadow-lg ml-4">
-          <div>
-            <SidebarComponent />
-          </div>
-        </div>
-        <div className="mt-4 mr-24 postsContainer w-3/5 flex justify-center bg-gray-800 rounded-lg drop-shadow-lg">
-          <MyPostsContainer />
-        </div>
-        <div className="w-1/4 bg-gray-800 rounded-lg mt-4 mr-8">
-          <ChatbotComponent />
-        </div>
-      </div>
+    );
+  }
+
+  // Only render the container if authenticated
+  return isAuthenticated ? (
+    <div className="container mx-auto py-8">
+      <MyPostContainer />
     </div>
-  );
+  ) : null;
 };
 
 export default MyPosts;

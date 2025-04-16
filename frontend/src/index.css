@@ -1,4 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #ffffff;
+    --color-secondary: #f8f9fa;
+    --color-tertiary: #e9ecef;
+    --color-text: #212529;
+    --color-text-secondary: #6c757d;
+    --color-border: #dee2e6;
+    --color-accent: #0d6efd;
+  }
+
+  .dark {
+    --color-primary: #212529;
+    --color-secondary: #343a40;
+    --color-tertiary: #495057;
+    --color-text: #f8f9fa;
+    --color-text-secondary: #adb5bd;
+    --color-border: #495057;
+    --color-accent: #0d6efd;
+  }
+
+  body {
+    @apply bg-primary text-primary font-poppins transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .custom-scrollbar {
+    @apply scrollbar-thin scrollbar-webkit;
+  }
+
+  .card {
+    @apply bg-secondary rounded-lg p-4 shadow-md transition-colors duration-200;
+  }
+
+  .button-primary {
+    @apply bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-md transition-colors;
+  }
+
+  .button-secondary {
+    @apply bg-tertiary hover:bg-tertiary/90 text-primary font-medium py-2 px-4 rounded-md transition-colors;
+  }
+
+  .input {
+    @apply bg-primary border border-primary rounded-md px-3 py-2 text-primary focus:outline-none focus:ring-2 focus:ring-accent transition-colors duration-200;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-300;
+  }
+}
