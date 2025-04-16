@@ -1,150 +1,258 @@
-import React, { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
-import EditPostModal from "./EditPostModal";
+// src/components/posts/MyPostContainer.jsx
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import usePost from "../../hooks/usePost";
+import useAuth from "../../hooks/useAuth";
+import useDepartment from "../../hooks/useDepartment";
+import Button from "../common/Button";
+import Spinner from "../common/Spinner";
+import Modal from "../common/Modal";
 
-const MyPostsContainer = () => {
-  const [myPosts, setMyPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+const MyPostContainer = () => {
+  const { userPosts, loading, error, fetchUserPosts, deletePost } = usePost();
+  const { user, logout } = useAuth();
+  const { departments, fetchDepartments } = useDepartment();
+  const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    // Fetch user's posts from the backend server
-    const token = localStorage.getItem("token");
-    const decodedToken = jwtDecode(token);
-    const userId = decodedToken.userid;
-    console.log(userId);
-    fetch(`http://localhost:3000/api/posts/userposts?userid=${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMyPosts(data); // Set the fetched posts to the state
-      })
-      .catch((error) => {
-        console.error("Error fetching user's posts:", error);
-      });
-  }, []);
-  
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setSelectedPost(null);
+    if (user) {
+      console.log('Fetching user posts...');
+      fetchUserPosts();
+      fetchDepartments();
+    }
+  }, [user, fetchUserPosts, fetchDepartments]);
+
+  // Add a listener for navigation events
+  useEffect(() => {
+    const handleNavigation = () => {
+      if (user) {
+        console.log('Navigation detected, refreshing user posts...');
+        fetchUserPosts();
+      }
+    };
+
+    // Listen for navigation events
+    window.addEventListener('popstate', handleNavigation);
+
+    return () => {
+      window.removeEventListener('popstate', handleNavigation);
+    };
+  }, [user, fetchUserPosts]);
+
+  // Add effect to log when userPosts changes
+  useEffect(() => {
+    console.log('User posts updated:', userPosts);
+  }, [userPosts]);
+
+  const handleCreatePost = () => {
+    navigate("/posts/create");
   };
 
-  // Function to handle deleting a post
-  const handleDeletePost = (postId) => {
-    // Send a DELETE request to the backend to delete the post
+  const handleEdit = (postId) => {
+    // Check if user is authenticated
+    if (!user) {
+      setErrorMessage("Please log in to edit posts");
+      navigate("/login");
+      return;
+    }
+
+    // Check if token exists
     const token = localStorage.getItem("token");
-    fetch(`http://localhost:3000/api/posts/${postId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          // If the post was deleted successfully, remove it from the state
-          setMyPosts(myPosts.filter((post) => post.postid !== postId));
-        } else {
-          throw new Error("Failed to delete post.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting post:", error);
-      });
+    if (!token) {
+      setErrorMessage("Your session has expired. Please log in again.");
+      logout();
+      navigate("/login");
+      return;
+    }
+
+    // Verify the post belongs to the current user
+    const post = userPosts.find(p => p.postid === postId);
+    if (!post) {
+      setErrorMessage("Post not found");
+      return;
+    }
+
+    // Navigate to edit page with correct route
+    navigate(`/posts/${postId}/edit`, { state: { post } });
   };
 
-  // Function to handle editing a post
-  const handleEditPost = (postId, content) => {
-    setSelectedPost({ postId, content });
-    setIsEditing(true);
+  const confirmDelete = (postId) => {
+    if (!user) {
+      setErrorMessage("Please log in to delete posts");
+      navigate("/login");
+      return;
+    }
+    setPostToDelete(postId);
+    setShowDeleteModal(true);
   };
 
-  const handleSaveEdit = (postId, newContent) => {
-    // Send a PUT request to update the post
-    const token = localStorage.getItem("token");
-    fetch(`http://localhost:3000/api/posts/${postId}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content: newContent }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Update the post content in the state
-          const updatedPosts = myPosts.map((post) => {
-            if (post.postid === postId) {
-              return { ...post, content: newContent };
-            }
-            return post;
-          });
-          setMyPosts(updatedPosts);
-          // Close the edit modal
-          handleCancelEdit();
-        } else {
-          throw new Error("Failed to update post.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating post:", error);
-      });
+  const handleDelete = async () => {
+    if (!postToDelete || !user) return;
+
+    setLoadingDelete(true);
+    setErrorMessage(null);
+    
+    try {
+      const success = await deletePost(postToDelete);
+      if (success) {
+        setShowDeleteModal(false);
+        setPostToDelete(null);
+        // Refresh the posts list
+        fetchUserPosts();
+      }
+    } catch (err) {
+      if (err.message?.includes("session has expired") || err.message?.includes("Please log in")) {
+        setErrorMessage("Your session has expired. Please log in again.");
+        logout();
+        navigate("/login");
+      } else {
+        setErrorMessage(err.message || "Failed to delete post");
+      }
+    } finally {
+      setLoadingDelete(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center p-8">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  const posts = Array.isArray(userPosts) ? userPosts : [];
 
   return (
-    <div className="mx-2 my-2 w-full drop-shadow-sm overflow-y-scroll scrollbar-webkit ">
-      {myPosts.map((post) => (
-        <div key={post.postid} className="flex bg-gray-700 mt-2 rounded-lg drop-shadow-sm mr-2 cursor-pointer">
-          <div className="ml-8 flex-grow">
-            <p className="mt-4 text-white-100 text-semibold">{post.content}</p>
-            <div className="mt-2 text-white-100 mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="white"
-                className="w-8 h-8 inline-block"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-              </svg>
-              {post.user.username}
-            </div>
-          </div>
-          <div className="flex items-center mr-2 text-white-100">
-            <button
-              className="text-white rounded-lg bg-blue-500 py-2 px-4 mr-2"
-              onClick={() => handleEditPost(post.postid, post.content)}
-            >
-              Edit
-            </button>
-            <button
-              className="rounded-lg bg-red-500 py-2 px-4"
-              onClick={() => handleDeletePost(post.postid)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      ))}
-       {isEditing && selectedPost && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-600 bg-opacity-75 flex justify-center items-center z-50 transition-opacity duration-500">
-          <EditPostModal
-            postId={selectedPost.postId}
-            initialContent={selectedPost.content}
-            onSave={handleSaveEdit}
-            onCancel={handleCancelEdit}
-          />
+    <div className="max-w-4xl mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">My Posts</h1>
+        <Button onClick={handleCreatePost} className="bg-blue-500 text-white">
+          Create New Post
+        </Button>
+      </div>
+
+      {errorMessage && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <p>{errorMessage}</p>
         </div>
       )}
+
+      {posts.length === 0 ? (
+        <div className="bg-gray-50 rounded-lg p-8 text-center">
+          <p className="text-gray-600 mb-4">
+            You haven't created any posts yet.
+          </p>
+          <Button onClick={handleCreatePost} className="bg-blue-500 text-white">
+            Create Your First Post
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {[...posts]
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .map((post) => (
+              <div key={post.postid} className="bg-white shadow-md rounded-lg p-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <Link
+                      to={`/posts/${post.postid}`}
+                      className="text-xl font-semibold text-blue-600 hover:text-blue-800"
+                    >
+                      {post.title}
+                    </Link>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {new Date(post.timestamp).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                      })}
+                    </p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      onClick={() => handleEdit(post.postid)}
+                      className="bg-blue-500 text-white"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => confirmDelete(post.postid)}
+                      className="bg-red-500 text-white"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="mt-2">
+                  <p className="text-gray-700 line-clamp-2">
+                    {post.content ? post.content.substring(0, 150) : ''}
+                    {post.content && post.content.length > 150 && "..."}
+                  </p>
+                </div>
+
+                {post.tags && post.tags.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {post.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Delete Post"
+      >
+        <div className="p-4">
+          <p className="mb-4">
+            Are you sure you want to delete this post? This action cannot be
+            undone.
+          </p>
+          <div className="flex justify-end space-x-3">
+            <Button
+              onClick={() => setShowDeleteModal(false)}
+              className="bg-gray-300 text-gray-800"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDelete}
+              disabled={loadingDelete}
+              className="bg-red-500 text-white"
+            >
+              {loadingDelete ? "Deleting..." : "Delete"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
 
-export default MyPostsContainer;
+export default MyPostContainer;
