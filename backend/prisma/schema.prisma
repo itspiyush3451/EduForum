@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+model User {
+  userid    String   @id @default(uuid())  
+  username  String   @unique
+  email     String   @unique
+  password  String?
+  googleId  String?   @unique
+  usertype  UserRole @default(STUDENT) //  Enforcing predefined roles with default as STUDENT
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Add relations ✅
+  posts     Post[]
+  comments  Comment[]
+  notices   Notice[]
+  invalidatedTokens InvalidatedToken[]
+  departmentid Int?
+  department   Department? @relation(fields: [departmentid], references: [departmentid], onDelete: SetNull)
+  
+}
+
+model Department {
+  departmentid        Int  @id @default(autoincrement())
+  name      String  @unique
+  description String? // Optional description field
+  users     User[]  // One-to-many relationship with Users
+  posts     Post[]
+  notices   Notice[]
+  comments  Comment[]
+}
+
+
+model Post {
+  postid     Int      @id @default(autoincrement())
+  content    String
+  timestamp  DateTime @default(now())
+  userid     String
+  user       User     @relation(fields: [userid], references: [userid], onDelete: Cascade)
+  comments   Comment[]
+  departmentid Int
+  department Department @relation(fields: [departmentid], references: [departmentid], onDelete: Cascade)
+}
+
+model Comment {
+  commentid  Int      @id @default(autoincrement())
+  content    String
+  timestamp  DateTime @default(now())
+  userid     String
+  postid     Int
+  user       User     @relation(fields: [userid], references: [userid], onDelete: Cascade)
+  post       Post     @relation(fields: [postid], references: [postid], onDelete: Cascade)
+  departmentid Int
+  department Department @relation(fields: [departmentid], references: [departmentid], onDelete: Cascade)
+}
+
+model Notice {
+  noticeid   Int      @id @default(autoincrement())
+  title      String
+  content    String
+  timestamp  DateTime @default(now())
+  filename   String?
+  userid     String
+  user       User     @relation(fields: [userid], references: [userid], onDelete: Cascade)
+  departmentid Int
+  department Department @relation(fields: [departmentid], references: [departmentid], onDelete: Cascade)
+}
+//for google registeration
+model Session {
+  sid    String   @id @db.VarChar
+  sess   Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], name: "IDX_session_expire")
+  @@map("session")
+}
+
+//logout model
+model InvalidatedToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userid    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userid], references: [userid])
+
+  @@index([token])
+  @@index([expiresAt])
+}
