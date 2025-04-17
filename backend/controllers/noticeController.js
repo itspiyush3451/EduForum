@@ -101,28 +101,22 @@ export const downloadAttachment = async (req, res) => {
   try {
     const { noticeId, filename } = req.params;
     
-    // Construct the file path - use the same path as in App.js
+    // Construct the file path
     const filePath = path.join(__dirname, "../uploads", filename);
-    
-    console.log("Attempting to download file from path:", filePath);
-    console.log("Current directory:", __dirname);
-    console.log("File exists:", fs.existsSync(filePath));
     
     // Check if file exists
     if (!fs.existsSync(filePath)) {
-      console.error("File not found:", filePath);
       return res.status(404).json({
         success: false,
-        message: "File not found",
-        path: filePath,
+        message: "File not found"
       });
     }
 
-    // Set appropriate headers
+    // Set appropriate headers for file download
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Type', 'application/octet-stream');
 
-    // Create read stream and pipe to response
+    // Stream the file to response
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
 
@@ -133,18 +127,17 @@ export const downloadAttachment = async (req, res) => {
         res.status(500).json({
           success: false,
           message: "Error streaming file",
-          error: err.message,
+          error: err.message
         });
       }
     });
-
   } catch (error) {
     console.error("Error in downloadAttachment:", error);
     if (!res.headersSent) {
       res.status(500).json({
         success: false,
         message: "Failed to download attachment",
-        error: error.message,
+        error: error.message
       });
     }
   }

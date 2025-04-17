@@ -8,6 +8,7 @@ import postRoutes from "./routes/postRoutes.js";
 import noticeRoutes from "./routes/noticeRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import departmentRoutes from "./routes/departmentRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import passport from "./middlewares/authGoogle.js"; // Import Passport config
 import authRoutes from "./routes/authRoutes.js"; // Import OAuth routes
 import path from "path";
@@ -86,6 +87,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/departments", departmentRoutes);
+app.use("/api/chat", chatRoutes);
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
