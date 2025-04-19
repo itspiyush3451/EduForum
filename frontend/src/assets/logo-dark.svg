@@ -1,0 +1,26 @@
+<svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon Part -->
+  <defs>
+    <linearGradient id="iconGradientDark" x1="15" y1="15" x2="45" y2="45" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#94C1E4"/>
+      <stop offset="100%" stop-color="#6A9AC0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main icon background with rounded corners -->
+  <rect x="15" y="15" width="30" height="30" rx="6" fill="url(#iconGradientDark)"/>
+  
+  <!-- Diamond shape in center -->
+  <path d="M30 20L35 30L30 40L25 30L30 20Z" fill="#1A1A1A" fill-opacity="0.9"/>
+  
+  <!-- Connection lines -->
+  <path d="M30 30H38" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M22 30H18" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M30 22V18" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M30 38V42" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Text Part -->
+  <text x="60" y="35" font-family="Arial, sans-serif" font-size="18" letter-spacing="0.5">
+    <tspan font-weight="bold" fill="#94C1E4">Edu</tspan><tspan fill="#94C1E4">Forum</tspan>
+  </text>
+</svg>
