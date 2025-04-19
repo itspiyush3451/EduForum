@@ -1,0 +1,167 @@
+{
+  "college_name": "Indira College of Engineering & Management",
+  "foundation_year": "2007",
+  "chairperson": "Dr. Tarita Shankar",
+  "academic_advisor": "Chetan Wakalkar",
+  "principal": "Dr. Nilesh Uke",
+  "vice_principal": "Dr. Soumitra Das",
+  "admission": {
+    "process": "Admissions are open for the academic year 2025-26. Students can apply through the college website or visit the campus directly. Entrance exams accepted: JEE Main and MAH-CET",
+    "criteria": "Minimum 60% in 12th grade for MCA.",
+    "documents_required": [
+      "10th and 12th Marksheet",
+      "Entrance Exam Rank Card",
+      "Aadhaar Card",
+      "Passport-size Photographs",
+      "Transfer Certificate",
+      "Migration Certificate (if applicable)"
+    ],
+    "important_dates": {
+      "application_start": "2025-06-12",
+      "application_end": "2025-07-30",
+      "counseling": "2025-08-16 to 2025-08-30"
+    }
+  },
+  "fees": {
+    "mca": {
+      "general": "INR 1,40,000 per year",
+      "obc": "INR 1,00,000 per year",
+      "sebc": "INR 90,000 per year",
+      "sc_st": "INR 2000 per year",
+      "vjnt": "INR 2000 per year"
+    },
+    "hostel": {
+      "boys": "INR 30,000 per semester",
+      "girls": "INR 30,000 per semester"
+    },
+    "bus": "INR 12,000 per semester"
+  },
+  "scholarships": {
+    "government": [
+      "Post Matric Scholarship for SC/ST/OBC",
+      "Minority Scholarship",
+      "EBC Scholarship for Economically Backward Class"
+    ],
+    "application_process": "Apply via official scholarship portal or through college admin office with relevant documents before the due date."
+  },
+  "mca_department": {
+    "general_info": "The MCA department at Indira College of Engineering & Management is committed to providing industry-relevant education in computer applications. The department emphasizes practical learning, coding skills, research initiatives, and industry exposure.",
+    "staff": {
+      "hod": "Dr. Darshana Desai",
+      "placement_coordinator": "Tejas Pawar",
+      "project_coordinator": "Dhanashree Patil",
+      "academic_exam_coordinator": "Shreya Shenai",
+      "professor": "Hetal Thaker"
+    }
+  },
+  "classes": {
+    "mode": "Offline",
+    "timing": "Monday to Friday, 9:40 AM - 4:40 PM",
+    "labs": ["Computer Lab"],
+    "extra_classes": "Weekend tutorials and coding bootcamps",
+    "timetable": {
+      "monday": ["ADBMS", "STT", "AWT Theory", "Python Lab"],
+      "tuesday": ["Python", "ADMBS", "AWT Lab", "Power BI Lab"],
+      "wednesday": ["Research Methodology", "STT", "Python Lab"],
+      "thursday": ["AWT Lab", "Research Methodology", "Power BI Lab"],
+      "friday": ["Python", "Power BI Theory", "ADBMS", "Placement Prep"]
+    }
+  },
+  "academic_calendar": {
+    "2025-26": {
+      "semester_1": {
+        "start": "2025-09-12",
+        "end": "2026-01-17",
+        "holidays": ["2025-08-15 (Independence Day)", "2025-10-02 (Gandhi Jayanti)", "2025-11-01 to 2025-11-10 (Diwali)"],
+        "working_days": 90
+      },
+      "semester_2": {
+        "start": "2026-02-01",
+        "end": "2026-06-15",
+        "holidays": ["2026-01-26 (Republic Day)", "2026-03-10 (Holi)"],
+        "working_days": 92
+      }
+    }
+  },
+  "syllabus": {
+    "mca_course": {
+      "semester_1": ["Java with SpringBoot", "Object Oriented Software Engineering", "Data Structures", "Operating System with Shell Scripting", "Mathematics & Business Studies"],
+      "semester_2": ["Python", "Software Testing & Tools", "ADBMS", "Research Methodology"],
+      "semester_3": ["Mobile Application Development", "Software Project Management"],
+      "semester_4": ["MOOC-1", "MOOC-2", "MOOC-3", "Industrial Internship/On Job Training"]
+    }
+  },
+  "bus_facility": {
+    "available": true,
+    "routes": [
+      "Somatne Phata",
+      "Dehu Road",
+      "Wakad",
+      "Parandwadi"
+    ],
+    "timing": "Buses start at 8:00 AM and return at 5:00 PM",
+    "fees": "INR 10,000 per semester"
+  },
+  "hostel": {
+    "available": true,
+    "rooms": "3-seater Non-AC",
+    "facilities": ["Wi-Fi", "Study Room", "Laundry", "Mess", "24/7 Security"]
+  },
+  "placements": {
+    "ratio": "60% of students placed in 2024",
+    "average_package": "INR 4 LPA",
+    "highest_package": "INR 9.5 LPA",
+    "top_companies": [
+      "Vanderlande",
+      "Crowdstrike",
+      "Lentra",
+      "Quorum"
+    ],
+    "support": "Resume workshops, mock interviews for placements, career counseling",
+    "company_info": {
+      "Vanderlande": {
+        "role": "Software Engineer",
+        "package": "INR 9.5 LPA",
+        "requirements": "Java, Spring Boot, System Design skills"
+      },
+      "Crowdstrike": {
+        "role": "IT Desk Support",
+        "package": "INR 8.5 LPA",
+        "requirements": "Strong knowledge in cybersecurity and Networking"
+      },
+      "Lentra": {
+        "role": "Developer",
+        "package": "INR 4-6 LPA",
+        "requirements": "Knowledge of DBMS, Java/Python, OS fundamentals"
+      },
+      "Quorum": {
+        "role": "Developer",
+        "package": "INR 4-6 LPA",
+        "requirements": "C#, .NET, Basic coding, problem-solving, aptitude"
+      }
+    }
+  },
+  "campus_life": {
+    "clubs": [
+      "Coding Club",
+      "Robotics Club",
+      "Drama Club",
+      "Entrepreneurship Cell",
+      "Music Band"
+    ],
+    "events": [
+      "TechFest",
+      "Cultural Week",
+      "Sports Meet",
+      "Placement Day",
+      "Alumni Meet"
+    ],
+    "sports": ["Cricket", "Football", "Table Tennis", "Badminton", "Basketball"]
+  },
+  "contact": {
+    "address": " Indira Chanakya Campus (ICC), S.No. 64,65, Gat No. 276 At Post : Parandwadi, Near Somatne phata, Tal. : Maval, Dist. Pune – 410 506",
+    "phone": "02114 – 661500 / 666",
+    "email": "info@indiraicem.ac.in",
+    "website": "https://icem.ac.in"
+  }
+}
