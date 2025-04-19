@@ -1,52 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 // Notice components
 import NoticeContainer from "../components/notices/NoticeContainer";
-import MyNoticesContainer from "../components/notices/MyNoticesContainer";
 import NoticeDetails from "../components/notices/NoticeDetails";
 import CreateEditNoticeForm from "../components/notices/CreateEditNoticeForm";
 
-const NoticesList = React.memo(({ isAuthenticated, isTeacher, selectedTab, onTabChange }) => {
+const NoticesList = React.memo(({ isAuthenticated }) => {
   return (
     <>
       <h1 className="text-3xl font-bold mb-6">Notices</h1>
 
-      {isTeacher && (
-        <div className="mb-6">
-          <button
-            className={`px-4 py-2 mr-2 rounded ${
-              selectedTab === "all"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-black"
-            }`}
-            onClick={() => onTabChange("all")}
-          >
-            All Notices
-          </button>
-          <button
-            className={`px-4 py-2 rounded ${
-              selectedTab === "my"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-black"
-            }`}
-            onClick={() => onTabChange("my")}
-          >
-            My Notices
-          </button>
-        </div>
-      )}
-
-      {isTeacher ? (
-        selectedTab === "all" ? (
-          <NoticeContainer />
-        ) : (
-          <MyNoticesContainer />
-        )
-      ) : (
-        <NoticeContainer />
-      )}
+      <NoticeContainer />
 
       {!isAuthenticated && (
         <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mt-6">
@@ -62,11 +28,6 @@ const NoticesList = React.memo(({ isAuthenticated, isTeacher, selectedTab, onTab
 
 const Notices = () => {
   const { isAuthenticated, isTeacher } = useAuth();
-  const [selectedTab, setSelectedTab] = useState("all");
-
-  const handleTabChange = (tab) => {
-    setSelectedTab(tab);
-  };
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">
@@ -110,9 +71,6 @@ const Notices = () => {
           element={
             <NoticesList
               isAuthenticated={isAuthenticated}
-              isTeacher={isTeacher}
-              selectedTab={selectedTab}
-              onTabChange={handleTabChange}
             />
           }
         />
