@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useTheme();
   const [hoveredItem, setHoveredItem] = useState(null);
   const location = useLocation();
 

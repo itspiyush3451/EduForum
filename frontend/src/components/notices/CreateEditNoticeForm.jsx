@@ -184,161 +184,186 @@ const CreateEditNoticeForm = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md space-y-6">
-      <div className="flex items-center mb-4">
-        <button onClick={handleBack} className="text-blue-600 mr-2">
-          <FaArrowLeft className="h-5 w-5" />
-        </button>
-        <h2 className="text-2xl font-semibold">
-          {isEditing ? "Edit Notice" : "Create Notice"}
-        </h2>
-      </div>
-
-      {(error || fileError) && (
-        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded flex items-center">
-          <FaExclamationCircle className="h-5 w-5 mr-2" />
-          <span>{error || fileError}</span>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block font-medium mb-1" htmlFor="title">
-            Title
-          </label>
-          <input
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className={`w-full border px-3 py-2 rounded ${
-              validationErrors.title ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          {validationErrors.title && (
-            <p className="text-red-500 text-sm">{validationErrors.title}</p>
-          )}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-4xl mx-auto">
+        {/* Back Button */}
+        <div className="mb-6">
+          <button
+            onClick={handleBack}
+            className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-2 rounded-lg transition-all duration-200"
+          >
+            <FaArrowLeft className="mr-2 h-4 w-4" />
+            Back to Notices
+          </button>
         </div>
 
-        <div>
-          <label className="block font-medium mb-1" htmlFor="content">
-            Content
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            className={`w-full border px-3 py-2 rounded min-h-[150px] ${
-              validationErrors.content ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          {validationErrors.content && (
-            <p className="text-red-500 text-sm">{validationErrors.content}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block font-medium mb-1" htmlFor="file">
-            Attachment (Optional)
-          </label>
-          <div className="space-y-2">
-            <input
-              type="file"
-              id="file"
-              name="file"
-              onChange={handleFileChange}
-              className="w-full border px-3 py-2 rounded border-gray-300"
-              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-            />
-            
-            {(filePreview || formData.file) && (
-              <div className="mt-2 p-3 border rounded-md bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {filePreview ? (
-                      formData.file.type.startsWith('image/') ? (
-                        <FaImage className="h-5 w-5 text-gray-500" />
-                      ) : (
-                        <FaFileAlt className="h-5 w-5 text-gray-500" />
-                      )
-                    ) : (
-                      <FaFileAlt className="h-5 w-5 text-gray-500" />
-                    )}
-                    <span className="text-sm text-gray-600">
-                      {filePreview ? formData.file.name : "No file selected"}
-                    </span>
-                  </div>
-                  <div className="flex space-x-2">
-                    {formData.file && (
-                      <button
-                        type="button"
-                        onClick={handleDownloadFile}
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        <FaDownload className="h-5 w-5" />
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={handleRemoveFile}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <FaTimes className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-                {filePreview && formData.file.type.startsWith('image/') && (
-                  <img
-                    src={filePreview}
-                    alt="Preview"
-                    className="mt-2 max-h-40 rounded"
-                  />
+        {/* Form Card */}
+        <div className="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+          <div className="p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Title Field */}
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors"
+                  placeholder="Enter a descriptive title for your notice"
+                />
+                {validationErrors.title && (
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">{validationErrors.title}</p>
                 )}
               </div>
-            )}
+
+              {/* Content Field */}
+              <div>
+                <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Content
+                </label>
+                <textarea
+                  id="content"
+                  name="content"
+                  rows={8}
+                  value={formData.content}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white sm:text-sm transition-colors"
+                  placeholder="Write the content of your notice here..."
+                />
+                {validationErrors.content && (
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">{validationErrors.content}</p>
+                )}
+              </div>
+
+              {/* File Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Attachment
+                </label>
+                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+                  <div className="space-y-2 text-center">
+                    {!formData.file ? (
+                      <>
+                        <FaFileAlt className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+                        <div className="flex text-sm text-gray-600 dark:text-gray-400">
+                          <label
+                            htmlFor="file-upload"
+                            className="relative cursor-pointer rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                          >
+                            <span>Upload a file</span>
+                            <input
+                              id="file-upload"
+                              name="file-upload"
+                              type="file"
+                              className="sr-only"
+                              onChange={handleFileChange}
+                            />
+                          </label>
+                          <p className="pl-1">or drag and drop</p>
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          PDF, DOC, DOCX, TXT, JPG, PNG up to 5MB
+                        </p>
+                      </>
+                    ) : (
+                      <div className="flex items-center justify-center space-x-2">
+                        <FaFileAlt className="h-8 w-8 text-blue-500" />
+                        <span className="text-sm text-gray-900 dark:text-gray-100">{formData.file.name}</span>
+                        <button
+                          type="button"
+                          onClick={handleRemoveFile}
+                          className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                        >
+                          <FaTimes className="h-5 w-5" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {fileError && (
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">{fileError}</p>
+                )}
+              </div>
+
+              {/* Options */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
+                <div className="flex items-center space-x-8">
+                  <div className="flex items-center">
+                    <input
+                      id="important"
+                      name="important"
+                      type="checkbox"
+                      checked={formData.important}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded transition-colors"
+                    />
+                    <label htmlFor="important" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                      Mark as important
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      id="published"
+                      name="published"
+                      type="checkbox"
+                      checked={formData.published}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded transition-colors"
+                    />
+                    <label htmlFor="published" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                      Publish immediately
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex flex-col sm:flex-row sm:justify-end space-y-4 sm:space-y-0 sm:space-x-4 pt-6">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="inline-flex justify-center items-center px-6 py-2.5 border border-red-500 dark:border-red-600 shadow-sm text-sm font-medium rounded-lg text-white bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-700 hover:border-red-600 dark:hover:border-red-700 hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex justify-center items-center px-6 py-2.5 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-none"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <FaSpinner className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Notice'
+                  )}
+                </button>
+              </div>
+
+              {/* Error Message */}
+              {validationErrors.submit && (
+                <div className="mt-4 rounded-lg bg-red-50 dark:bg-red-900/20 p-4">
+                  <div className="flex">
+                    <FaExclamationCircle className="h-5 w-5 text-red-400" />
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800 dark:text-red-400">Error</h3>
+                      <div className="mt-2 text-sm text-red-700 dark:text-red-300">
+                        <p>{validationErrors.submit}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </form>
           </div>
         </div>
-
-        <div className="flex items-center justify-between">
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name="important"
-              checked={formData.important}
-              onChange={handleChange}
-            />
-            <span>Mark as Important</span>
-          </label>
-
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name="published"
-              checked={formData.published}
-              onChange={handleChange}
-            />
-            <span>Publish</span>
-          </label>
-        </div>
-
-        <div className="flex justify-end space-x-2">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting || loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-          >
-            {isSubmitting ? "Saving..." : isEditing ? "Update Notice" : "Create Notice"}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };

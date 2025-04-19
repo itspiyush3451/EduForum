@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAuth from "../../context/AuthContext";
 import useNotice from "../../hooks/useNotice";
 
@@ -16,21 +16,23 @@ import { PlusIcon, SearchIcon, RefreshCw, Pencil, Trash2 } from "lucide-react";
 const MyNoticeContainer = () => {
   const { user } = useAuth();
   const {
-    notices,
+    userNotices: notices,
     loading,
     error,
     isTeacher,
-    refreshNotices,
+    fetchUserNotices,
     updateNotice,
     deleteNotice,
-  } = useNotice({
-    fetchOnMount: true,
-    userNoticesOnly: true, // This is the key difference from NoticeContainer
-  });
+  } = useNotice();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [noticeToDelete, setNoticeToDelete] = useState(null);
+
+  // Fetch notices on mount
+  useEffect(() => {
+    fetchUserNotices();
+  }, [fetchUserNotices]);
 
   // Filter notices based on search term
   const filteredNotices = notices
@@ -54,7 +56,7 @@ const MyNoticeContainer = () => {
 
   // Refresh notices
   const handleRefresh = () => {
-    refreshNotices();
+    fetchUserNotices();
   };
 
   // Navigate to create notice page
@@ -71,7 +73,7 @@ const MyNoticeContainer = () => {
   // Execute notice deletion
   const handleDelete = async () => {
     if (noticeToDelete) {
-      await deleteNotice(noticeToDelete.id);
+      await deleteNotice(noticeToDelete.noticeid);
       setDeleteDialogOpen(false);
       setNoticeToDelete(null);
     }
@@ -79,7 +81,7 @@ const MyNoticeContainer = () => {
 
   // Toggle notice importance
   const toggleImportance = async (notice) => {
-    await updateNotice(notice.id, {
+    await updateNotice(notice.noticeid, {
       ...notice,
       important: !notice.important,
     });
@@ -163,7 +165,7 @@ const MyNoticeContainer = () => {
       ) : (
         <div className="space-y-4">
           {filteredNotices.map((notice) => (
-            <div key={notice.id} className="w-full border rounded-md p-4">
+            <div key={notice.noticeid} className="w-full border rounded-md p-4">
               <div className="mb-4">
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-bold">{notice.title}</h3>
@@ -179,9 +181,9 @@ const MyNoticeContainer = () => {
                   </div>
                 </div>
                 <p className="text-gray-500 text-sm">
-                  Posted on {formatDate(notice.createdAt)}
-                  {notice.updatedAt !== notice.createdAt &&
-                    ` (Updated on ${formatDate(notice.updatedAt)})`}
+                  Posted on {formatDate(notice.createdat)}
+                  {notice.updatedat !== notice.createdat &&
+                    ` (Updated on ${formatDate(notice.updatedat)})`}
                 </p>
               </div>
               <div className="mb-4">
@@ -201,7 +203,7 @@ const MyNoticeContainer = () => {
                 <div className="flex space-x-2">
                   <Button
                     className="border border-gray-300 bg-white text-gray-700"
-                    onClick={() => handleEdit(notice.id)}
+                    onClick={() => handleEdit(notice.noticeid)}
                   >
                     Edit
                   </Button>

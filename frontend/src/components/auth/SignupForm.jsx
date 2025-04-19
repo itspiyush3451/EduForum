@@ -158,7 +158,7 @@ const SignupForm = ({ userRole }) => {
           <input
             type="email"
             id="email"
-            className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
+            className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-white"
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
@@ -176,7 +176,7 @@ const SignupForm = ({ userRole }) => {
           <input
             type="text"
             id="username"
-            className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
+            className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-white"
             placeholder="Choose a username"
             value={formData.username}
             onChange={handleChange}
@@ -194,7 +194,7 @@ const SignupForm = ({ userRole }) => {
           <input
             type="password"
             id="password"
-            className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
+            className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-white"
             placeholder="Create a password"
             value={formData.password}
             onChange={handleChange}
@@ -212,7 +212,7 @@ const SignupForm = ({ userRole }) => {
           <input
             type="password"
             id="confirmPassword"
-            className="shadow text-sm border-none mt-2 rounded-lg w-full py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
+            className="shadow text-sm border-none mt-2 rounded-lg w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-white"
             placeholder="Confirm password"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -234,7 +234,7 @@ const SignupForm = ({ userRole }) => {
             </label>
             <select
               id="departmentid"
-              className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-white-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-600"
+              className="shadow text-sm border-none rounded-lg w-full mt-2 py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline bg-white"
               value={formData.departmentid}
               onChange={handleChange}
               required

@@ -33,7 +33,7 @@ const AdminNavbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 text-white fixed top-0 left-0 right-0 h-16 z-50 shadow-lg">
+    <nav className="fixed top-0 left-0 right-0 h-16 z-50 shadow-lg transition-colors duration-300 bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -43,7 +43,9 @@ const AdminNavbar = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                 </svg>
               </div>
-              <span className="ml-3 text-xl font-bold tracking-tight">Admin <span className="text-blue-400 group-hover:text-blue-300 transition-colors">Portal</span></span>
+              <span className="ml-3 text-xl font-bold tracking-tight text-white">
+                Admin <span className="text-blue-400 group-hover:text-blue-300 transition-colors">Portal</span>
+              </span>
             </Link>
           </div>
 
@@ -77,7 +79,7 @@ const AdminNavbar = () => {
 
             {/* Notifications */}
             <button className="relative p-1.5 rounded-full hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
               {notifications > 0 && (
@@ -89,7 +91,7 @@ const AdminNavbar = () => {
 
             {/* Help */}
             <button className="p-1.5 rounded-full hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </button>
@@ -130,17 +132,17 @@ const AdminNavbar = () => {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-xl bg-white text-gray-900 z-[100] transform origin-top-right transition-all duration-200 ease-out">
+                <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-xl bg-gray-800 text-white z-[100] transform origin-top-right transition-all duration-200 ease-out">
                   <div className="py-1">
                     <button
                       onClick={handleLogout}
-                      className="group flex items-center px-4 py-2.5 text-sm text-red-700 hover:bg-red-50 w-full text-left transition-colors duration-150"
+                      className="group flex items-center px-4 py-2.5 text-sm text-red-400 hover:bg-gray-700 w-full text-left transition-colors duration-150"
                       role="menuitem"
                     >
-                      <svg className="mr-3 h-5 w-5 text-red-500 group-hover:text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="mr-3 h-5 w-5 text-red-400 group-hover:text-red-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                       </svg>
-                      <span className="group-hover:text-red-800">Sign out</span>
+                      <span className="group-hover:text-red-300">Sign out</span>
                     </button>
                   </div>
                 </div>

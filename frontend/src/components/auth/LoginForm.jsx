@@ -163,7 +163,7 @@ const EnhancedLoginForm = () => {
                   onBlur={() => setFocusedField(null)}
                   className={`block w-full pl-10 pr-3 py-2 border ${
                     errors.identifier ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                  } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white`}
                   placeholder="Enter your username or email"
                   aria-invalid={!!errors.identifier}
                   aria-describedby={
@@ -204,7 +204,7 @@ const EnhancedLoginForm = () => {
                   onBlur={() => setFocusedField(null)}
                   className={`block w-full pl-10 pr-10 py-2 border ${
                     errors.password ? "border-red-300" : "border-gray-300"
-                  } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                  } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white`}
                   placeholder="Enter your password"
                   aria-invalid={!!errors.password}
                   aria-describedby={

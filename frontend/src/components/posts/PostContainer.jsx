@@ -11,7 +11,7 @@ import Modal from "../common/Modal";
 import { userService } from "../../services/userService";
 import CreateCommentForm from "../comments/CreateCommentForm";
 import { useComments } from "../../context/CommentContext";
-import { FaComment, FaRegComment, FaRegCommentDots, FaPlus } from "react-icons/fa";
+import { FaComment, FaRegComment, FaHeart, FaRegHeart, FaShare, FaEllipsisH, FaPlus, FaImage } from "react-icons/fa";
 
 const PostContainer = () => {
   const { departmentPosts, loading, error, fetchAllPosts, createPost } = usePost();
@@ -31,6 +31,11 @@ const PostContainer = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [newPostContent, setNewPostContent] = useState("");
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [newPostTags, setNewPostTags] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
+  const [liked, setLiked] = useState({});
 
   useEffect(() => {
     fetchAllPosts();
@@ -77,16 +82,13 @@ const PostContainer = () => {
       for (const userId of uniqueUserIds) {
         if (!newUserNames[userId]) {
           try {
-            console.log(`Fetching user data for ID: ${userId}`);
             const response = await userService.getUserById(userId);
-            console.log(`User data response for ${userId}:`, response);
             
             if (response.data && response.data.username) {
               newUserNames[userId] = response.data.username;
             } else if (response.data && response.data.user) {
               newUserNames[userId] = response.data.user.username;
             } else {
-              console.warn(`No username found for user ${userId}`);
               newUserNames[userId] = 'Anonymous';
             }
           } catch (error) {
@@ -108,38 +110,22 @@ const PostContainer = () => {
       [postId]: !prev[postId]
     }));
     
-    // Always fetch comments when expanding, and also fetch when collapsing to ensure we have the latest data
     await fetchComments(postId);
   };
 
   const validateForm = () => {
     const errors = {};
 
-    if (!formData.title.trim()) {
+    if (!newPostTitle.trim()) {
       errors.title = "Title is required";
     }
 
-    if (!formData.content.trim()) {
+    if (!newPostContent.trim()) {
       errors.content = "Content is required";
     }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (formErrors[name]) {
-      setFormErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
   };
 
   const handleCreatePost = async (e) => {
@@ -151,8 +137,8 @@ const PostContainer = () => {
 
     setSubmitting(true);
 
-    const processedTags = formData.tags
-      ? formData.tags
+    const processedTags = newPostTags
+      ? newPostTags
           .split(",")
           .map((tag) => tag.trim())
           .filter((tag) => tag)
@@ -171,8 +157,8 @@ const PostContainer = () => {
     }
 
     const postData = {
-      title: formData.title,
-      content: formData.content,
+      title: newPostTitle,
+      content: newPostContent,
       tags: processedTags,
       departmentid: Number(departmentId),
     };
@@ -180,9 +166,9 @@ const PostContainer = () => {
     try {
       await createPost(postData);
       setSubmitting(false);
-      setShowCreateModal(false);
+      setIsComposing(false);
       resetForm();
-      await fetchAllPosts(); // Refresh the posts list
+      await fetchAllPosts();
     } catch (error) {
       console.error("Error creating post:", error);
       setFormErrors((prev) => ({
@@ -194,37 +180,56 @@ const PostContainer = () => {
   };
 
   const resetForm = () => {
-    setFormData({
-      title: "",
-      content: "",
-      tags: "",
-      departmentId: user?.departmentid || "",
-    });
+    setNewPostTitle("");
+    setNewPostContent("");
+    setNewPostTags("");
     setFormErrors({});
   };
 
-  const handleCloseCreateModal = () => {
-    setShowCreateModal(false);
-    resetForm();
+  const toggleLike = (postId) => {
+    setLiked(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
+  const handleEditPost = (post) => {
+    // Implement edit functionality
+    console.log("Edit post:", post);
+  };
+
+  const handleDeletePost = (postId) => {
+    // Implement delete functionality
+    console.log("Delete post:", postId);
+  };
+
+  const handleEditComment = (postId, commentId) => {
+    // Implement edit comment functionality
+    console.log("Edit comment:", postId, commentId);
+  };
+
+  const handleDeleteComment = (postId, commentId) => {
+    // Implement delete comment functionality
+    console.log("Delete comment:", postId, commentId);
   };
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center p-8 space-y-4">
         <Spinner size="lg" />
-        <p className="text-gray-600">Loading posts...</p>
+        <p className="text-gray-600 dark:text-gray-300">Loading posts...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <div className="bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg" role="alert">
         <strong className="font-bold">Error!</strong>
         <span className="block sm:inline"> {error}</span>
         <button 
           onClick={() => fetchAllPosts()} 
-          className="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+          className="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-lg"
         >
           Try Again
         </button>
@@ -233,252 +238,290 @@ const PostContainer = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Create Post Button */}
-      <div className="mb-6 flex justify-end">
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          variant="primary"
-          className="flex items-center gap-2"
-        >
-          <FaPlus className="text-sm" />
-          Create Post
-        </Button>
-      </div>
-
-      {/* Posts Feed */}
-      <div className="space-y-6">
-        {departmentPosts.map((post) => (
-          <div
-            key={post.postid}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
-          >
-            {/* Post Header */}
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-lg font-medium text-gray-600">
-                      {userNames[post.userid]?.[0]?.toUpperCase() || 'A'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {userNames[post.userid] || 'Anonymous'}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(post.timestamp).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                      })}
-                    </p>
-                  </div>
+    <div className="max-w-4xl mx-auto">
+      {/* Twitter-style Compose Box */}
+      <div className="border-b border-gray-300 dark:border-gray-700">
+        <div className="p-4">
+          {!isComposing ? (
+            <div 
+              onClick={() => setIsComposing(true)}
+              className="flex items-center space-x-4 cursor-pointer"
+            >
+              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                {user?.username?.[0]?.toUpperCase() || 'Y'}
+              </div>
+              <div className="flex-grow">
+                <div className="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                  What's on your mind?
                 </div>
-                {user?.userid === post.userid && (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEditPost(post)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => handleDeletePost(post.postid)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
               </div>
             </div>
-
-            {/* Post Content */}
-            <div className="p-4">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {post.title}
-              </h3>
-              <p className="text-gray-700 whitespace-pre-wrap">{post.content}</p>
-              
-              {/* Tags */}
-              {post.tags?.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {post.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+                  {user?.username?.[0]?.toUpperCase() || 'Y'}
                 </div>
-              )}
-            </div>
-
-            {/* Post Actions */}
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex-grow space-y-3">
+                  <input
+                    type="text"
+                    value={newPostTitle}
+                    onChange={(e) => setNewPostTitle(e.target.value)}
+                    placeholder="Add a title"
+                    className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 p-2 focus:outline-none focus:border-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
+                  />
+                  {formErrors.title && (
+                    <p className="text-red-500 text-sm">{formErrors.title}</p>
+                  )}
+                  
+                  <textarea
+                    value={newPostContent}
+                    onChange={(e) => setNewPostContent(e.target.value)}
+                    placeholder="What's happening?"
+                    className="w-full bg-transparent border-none p-2 focus:outline-none resize-none text-gray-900 dark:text-white placeholder-gray-500"
+                    rows={3}
+                  />
+                  {formErrors.content && (
+                    <p className="text-red-500 text-sm">{formErrors.content}</p>
+                  )}
+                  
+                  <input
+                    type="text"
+                    value={newPostTags}
+                    onChange={(e) => setNewPostTags(e.target.value)}
+                    placeholder="Add tags (comma-separated)"
+                    className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 p-2 focus:outline-none focus:border-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-between items-center pt-2">
+                <div className="flex space-x-2 text-blue-500">
+                  <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/20 transition">
+                    <FaImage />
+                  </button>
+                </div>
+                
+                <div className="flex space-x-3">
                   <button
-                    onClick={() => toggleComments(post.postid)}
-                    className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+                    onClick={() => {
+                      setIsComposing(false);
+                      resetForm();
+                    }}
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition"
                   >
-                    {expandedComments[post.postid] ? (
-                      <FaComment className="text-blue-600" />
-                    ) : (
-                      <FaRegComment />
-                    )}
-                    <span className="text-sm font-medium">
-                      {comments[post.postid]?.length || 0} {comments[post.postid]?.length === 1 ? 'comment' : 'comments'}
-                    </span>
+                    Cancel
+                  </button>
+                  
+                  <button
+                    onClick={handleCreatePost}
+                    disabled={submitting || !newPostTitle.trim() || !newPostContent.trim()}
+                    className={`px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full transition ${
+                      submitting || !newPostTitle.trim() || !newPostContent.trim()
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:shadow-lg"
+                    }`}
+                  >
+                    {submitting ? "Posting..." : "Post"}
                   </button>
                 </div>
               </div>
             </div>
-
-            {/* Comments Section */}
-            {expandedComments[post.postid] && (
-              <div className="border-t border-gray-200">
-                {/* Comments List */}
-                <div className="p-4 space-y-4">
-                  {comments[post.postid]?.map((comment) => {
-                    if (!comment) return null;
-                    
-                    const commentUser = userNames[comment.userid] || 'Anonymous';
-                    const userInitial = commentUser[0]?.toUpperCase() || 'A';
-                    
-                    return (
-                      <div
-                        key={comment.commentid}
-                        className="bg-gray-50 p-4 rounded-lg"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0">
-                            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                              <span className="text-sm font-medium text-gray-600">
-                                {userInitial}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="flex-grow">
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <p className="text-sm font-medium text-gray-900">
-                                  {commentUser}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  {comment.timestamp ? new Date(comment.timestamp).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit"
-                                  }) : 'Just now'}
-                                </p>
-                              </div>
-                              {user?.userid === comment.userid && (
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={() => handleEditComment(post.postid, comment.commentid)}
-                                    className="text-gray-500 hover:text-blue-600"
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteComment(post.postid, comment.commentid)}
-                                    className="text-gray-500 hover:text-red-600"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                            <p className="mt-2 text-gray-700">{comment.content || ''}</p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {(!comments[post.postid] || comments[post.postid].length === 0) && (
-                    <div className="text-center py-4 text-gray-500">
-                      <FaRegComment className="mx-auto text-2xl mb-2" />
-                      <p>No comments yet. Be the first to comment!</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Comment Form */}
-                <div className="p-4 border-t border-gray-200">
-                  <CreateCommentForm postId={post.postid} departmentId={post.departmentid} />
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+          )}
+        </div>
       </div>
 
-      {/* Create Post Modal */}
-      <Modal
-        isOpen={showCreateModal}
-        onClose={handleCloseCreateModal}
-        title="Create New Post"
-      >
-        <form onSubmit={handleCreatePost} className="space-y-4">
-          <Input
-            label="Title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            error={formErrors.title}
-            required
-          />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Content
-            </label>
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={4}
-              required
-            />
-            {formErrors.content && (
-              <p className="mt-1 text-sm text-red-600">{formErrors.content}</p>
-            )}
+      {/* Posts Feed */}
+      <div className="divide-y divide-gray-300 dark:divide-gray-700">
+        {departmentPosts.map((post) => (
+          <div
+            key={post.postid}
+            className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+          >
+            {/* Post Header */}
+            <div className="flex">
+              <div className="flex-shrink-0 mr-3">
+                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                  <span className="text-white font-medium">
+                    {userNames[post.userid]?.[0]?.toUpperCase() || 'A'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="flex-grow">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <span className="font-bold text-gray-900 dark:text-white">
+                      {userNames[post.userid] || 'Anonymous'}
+                    </span>
+                    <span className="ml-2 text-gray-500 dark:text-gray-400 text-sm">
+                      @{userNames[post.userid]?.toLowerCase().replace(/\s/g, '') || 'anonymous'}
+                    </span>
+                    <span className="mx-1 text-gray-500 dark:text-gray-400">·</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">
+                      {new Date(post.timestamp).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric"
+                      })}
+                    </span>
+                  </div>
+                  
+                  <div className="relative group">
+                    <button className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                      <FaEllipsisH size={14} />
+                    </button>
+                    
+                    {user?.userid === post.userid && (
+                      <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700 hidden group-hover:block z-10">
+                        <button
+                          onClick={() => handleEditPost(post)}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        >
+                          Edit post
+                        </button>
+                        <button
+                          onClick={() => handleDeletePost(post.postid)}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500"
+                        >
+                          Delete post
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Post Content */}
+                <div className="mt-1">
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-800 dark:text-gray-200 mt-1 whitespace-pre-wrap">
+                    {post.content}
+                  </p>
+                </div>
+                
+                {/* Tags */}
+                {post.tags?.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {post.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="text-blue-500 hover:underline text-sm cursor-pointer"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Post Actions */}
+                <div className="mt-3 flex justify-between max-w-md">
+                  <button
+                    onClick={() => toggleComments(post.postid)}
+                    className="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-500 group"
+                  >
+                    <div className="p-2 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/20 rounded-full mr-1 transition-colors">
+                      {expandedComments[post.postid] ? (
+                        <FaComment className="text-blue-500" size={16} />
+                      ) : (
+                        <FaRegComment size={16} />
+                      )}
+                    </div>
+                    <span>{comments[post.postid]?.length || 0}</span>
+                  </button>
+                </div>
+                
+                {/* Comments Section */}
+                {expandedComments[post.postid] && (
+                  <div className="mt-4 pl-3 border-l-2 border-gray-300 dark:border-gray-700">
+                    {/* Comment Form */}
+                    <div className="mb-4">
+                      <CreateCommentForm postId={post.postid} departmentId={post.departmentid} />
+                    </div>
+                    
+                    {/* Comments List */}
+                    <div className="space-y-4">
+                      {comments[post.postid]?.length > 0 ? (
+                        comments[post.postid].map((comment) => {
+                          if (!comment) return null;
+                          
+                          const commentUser = userNames[comment.userid] || 'Anonymous';
+                          const userInitial = commentUser[0]?.toUpperCase() || 'A';
+                          
+                          return (
+                            <div
+                              key={comment.commentid}
+                              className="flex group"
+                            >
+                              <div className="flex-shrink-0 mr-3">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 dark:from-gray-600 dark:to-gray-800 flex items-center justify-center">
+                                  <span className="text-white text-sm font-medium">
+                                    {userInitial}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex-grow">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center">
+                                    <span className="font-medium text-gray-900 dark:text-white">
+                                      {commentUser}
+                                    </span>
+                                    <span className="ml-2 text-gray-500 dark:text-gray-400 text-xs">
+                                      {comment.timestamp ? new Date(comment.timestamp).toLocaleDateString("en-US", {
+                                        month: "short",
+                                        day: "numeric",
+                                        hour: "numeric",
+                                        minute: "numeric"
+                                      }) : 'Just now'}
+                                    </span>
+                                  </div>
+                                  
+                                  {user?.userid === comment.userid && (
+                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                      <button
+                                        onClick={() => handleEditComment(post.postid, comment.commentid)}
+                                        className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-500 mr-2"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeleteComment(post.postid, comment.commentid)}
+                                        className="text-xs text-gray-500 dark:text-gray-400 hover:text-red-500"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                                <p className="text-gray-800 dark:text-gray-200 text-sm mt-1">
+                                  {comment.content || ''}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                          <FaRegComment className="mx-auto text-xl mb-2" />
+                          <p className="text-sm">No comments yet. Be the first to comment!</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-          <Input
-            label="Tags (comma-separated)"
-            name="tags"
-            value={formData.tags}
-            onChange={handleChange}
-            placeholder="e.g., question, help, discussion"
-          />
-          <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCloseCreateModal}
-              disabled={submitting}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={submitting}
-            >
-              {submitting ? "Creating..." : "Create Post"}
-            </Button>
+        ))}
+        
+        {departmentPosts.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-400">
+            <FaRegComment className="text-4xl mb-3" />
+            <p className="text-xl font-medium">No posts yet</p>
+            <p className="mt-1">Be the first to create a post!</p>
           </div>
-        </form>
-      </Modal>
+        )}
+      </div>
     </div>
   );
 };

@@ -11,7 +11,7 @@ import {
   FaPencilAlt as Pencil,
   FaTrashAlt as Trash2,
   FaFileAlt as FileText,
-  FaDownload as Download,
+  FaDownload as DownloadIcon,
   FaExclamationCircle as ImportantIcon,
   FaImage,
   FaEdit as EditIcon,
@@ -142,6 +142,14 @@ const NoticeContainer = () => {
     navigate(`/notices/edit/${noticeId}`);
   };
 
+  const handleDownload = async (noticeId) => {
+    try {
+      await downloadAttachment(noticeId);
+    } catch (error) {
+      console.error('Error downloading attachment:', error);
+    }
+  };
+
   if (loading) {
     return (
       <Box sx={{ p: 4 }}>
@@ -190,138 +198,126 @@ const NoticeContainer = () => {
   }
 
   return (
-    <Box sx={{ p: 4, bgcolor: "grey.50", minHeight: "100vh" }}>
-      <Box sx={{ maxWidth: 1200, margin: "0 auto" }}>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <Box sx={{ mb: 4, display: "flex", justifyContent: "flex-end" }}>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+          <div className="mb-4 sm:mb-0">
+            {/* <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Notices</h1> */}
+            {/* <p className="mt-2 text-gray-600 dark:text-gray-400">
+              Stay updated with the latest announcements and important information
+            </p> */}
+          </div>
           {isTeacher && (
-            <Button
-              variant="contained"
-              color="primary"
+            <button
               onClick={handleCreateNotice}
-              startIcon={<PlusIcon />}
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
+              <PlusIcon className="mr-2 h-5 w-5" />
               Create Notice
-            </Button>
+            </button>
           )}
-        </Box>
+        </div>
 
         {/* Notices Grid */}
-        <Grid container spacing={3}>
+        <div className="space-y-6">
           {notices.map((notice, index) => (
-            <Grid item xs={12} key={notice.noticeid}>
-              <Fade in={true} style={{ transitionDelay: `${index * 100}ms` }}>
-                <Card
-                  sx={{
-                    position: "relative",
-                    overflow: "visible",
-                    boxShadow: notice.important ? "0 0 0 2px #ef4444" : "none",
-                    "&:hover": {
-                      boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                    },
-                    transition: "box-shadow 0.3s ease",
-                  }}
-                >
-                  {notice.important && (
-                    <Chip
-                      icon={<ImportantIcon size="small" />}
-                      label="Important"
-                      color="error"
-                      size="small"
-                      sx={{
-                        position: "absolute",
-                        top: -12,
-                        right: 16,
-                        zIndex: 1,
-                      }}
-                    />
-                  )}
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h5" component="h2" gutterBottom sx={{ color: "primary.main", fontWeight: 600 }}>
+            <div
+              key={notice.noticeid}
+              className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden ${
+                notice.important ? 'border-l-4 border-red-500' : ''
+              }`}
+            >
+              <div className="p-6">
+                {/* Notice Header */}
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                       {notice.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      Posted by {userNames[notice.userid] || 'Unknown Teacher'} • 
-                      Department: {departments[notice.departmentid]?.name || 'Unknown Department'} • 
-                      {notice.timestamp ? format(new Date(notice.timestamp), 'MMM d, yyyy h:mm a') : 'Date not available'}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 2, whiteSpace: "pre-wrap" }}>
-                      {notice.content}
-                    </Typography>
-                    <Divider sx={{ my: 2 }} />
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "text.secondary", fontSize: "0.875rem" }}>
-                      <Typography variant="body2">
-                        {notice.filename && (
-                          <Paper
-                            elevation={0}
-                            sx={{
-                              mt: 2,
-                              p: 2,
-                              bgcolor: "grey.50",
-                              border: "1px solid",
-                              borderColor: "grey.200",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                              <FileText className="text-gray-500" />
-                              <Typography variant="body2" color="text.secondary">
-                                {notice.filename}
-                              </Typography>
-                            </Box>
-                            <IconButton
-                              onClick={() => downloadAttachment(notice.noticeid, notice.filename)}
-                              color="primary"
-                              size="small"
-                            >
-                              <Download />
-                            </IconButton>
-                          </Paper>
-                        )}
-                      </Typography>
-                    </Box>
-                  </CardContent>
-
-                  {isTeacher && (
-                    <CardActions sx={{ px: 3, pb: 2, pt: 0, justifyContent: "flex-end", gap: 1 }}>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEdit(notice.noticeid)}
-                        sx={{ color: "primary.main" }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleDelete(notice.noticeid)}
-                        sx={{ color: "error.main" }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </CardActions>
+                    </h3>
+                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                      <span className="font-medium text-gray-700 dark:text-gray-300">
+                        {userNames[notice.userid] || 'Unknown Teacher'}
+                      </span>
+                      <span className="mx-2">·</span>
+                      <span>
+                        {notice.timestamp ? format(new Date(notice.timestamp), 'MMM d, yyyy') : 'Date not available'}
+                      </span>
+                    </div>
+                  </div>
+                  {notice.important && (
+                    <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
+                      Important
+                    </span>
                   )}
-                </Card>
-              </Fade>
-            </Grid>
+                </div>
+
+                {/* Notice Content */}
+                <div className="mt-4">
+                  <p className="text-gray-600 dark:text-gray-300 whitespace-pre-wrap">
+                    {notice.content}
+                  </p>
+                </div>
+
+                {/* Department Info - Only show if department exists */}
+                {departments[notice.departmentid]?.name && (
+                  <div className="mt-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                      {departments[notice.departmentid].name}
+                    </span>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    {notice.filename && (
+                      <button
+                        onClick={() => downloadAttachment(notice.noticeid, notice.filename)}
+                        className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        <DownloadIcon className="h-4 w-4 mr-1" />
+                        Download Attachment
+                      </button>
+                    )}
+                  </div>
+                  {isTeacher && (
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(notice.noticeid)}
+                        className="p-2 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <EditIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(notice.noticeid)}
+                        className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <DeleteIcon className="h-5 w-5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           ))}
 
           {notices.length === 0 && (
-            <Grid item xs={12}>
-              <Paper sx={{ p: 4, textAlign: "center", bgcolor: "grey.50" }}>
-                <Typography variant="h6" color="text.secondary">
-                  No notices found
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  There are no notices to display
-                </Typography>
-              </Paper>
-            </Grid>
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                <FileText className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                No notices found
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                There are no notices to display at the moment.
+              </p>
+            </div>
           )}
-        </Grid>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

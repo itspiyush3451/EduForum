@@ -1,8 +1,6 @@
-// src/components/posts/CreateEditPostForm.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import usePost from "../../hooks/usePost";
-import useDepartment from "../../hooks/useDepartment";
 import useAuth from "../../hooks/useAuth";
 import Button from "../common/Button";
 import Input from "../common/Input";
@@ -25,6 +23,8 @@ const CreateEditPostForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [autoSaveTimer, setAutoSaveTimer] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
+  const [wordCount, setWordCount] = useState(0);
+  const [charCount, setCharCount] = useState(0);
 
   const isEditMode = Boolean(postId);
 
@@ -38,12 +38,18 @@ const CreateEditPostForm = () => {
             throw new Error("Post not found");
           }
 
+          const postContent = postData.content || "";
+          
           setFormData({
             title: postData.title || "",
-            content: postData.content || "",
+            content: postContent,
             tags: Array.isArray(postData.tags) ? postData.tags.join(", ") : "",
             departmentId: postData.departmentid || postData.department || "",
           });
+          
+          // Set initial counts
+          setCharCount(postContent.length);
+          setWordCount(postContent.trim() ? postContent.trim().split(/\s+/).length : 0);
         } catch (err) {
           console.error("Error loading post:", err);
           navigate("/posts/my-posts");
@@ -60,6 +66,10 @@ const CreateEditPostForm = () => {
       try {
         const draft = JSON.parse(savedDraft);
         setFormData(draft);
+        
+        // Set initial counts for draft
+        setCharCount(draft.content.length);
+        setWordCount(draft.content.trim() ? draft.content.trim().split(/\s+/).length : 0);
       } catch (error) {
         console.error('Error loading draft:', error);
       }
@@ -104,6 +114,12 @@ const CreateEditPostForm = () => {
       [name]: value,
     }));
 
+    // Update word and character count for content
+    if (name === "content") {
+      setCharCount(value.length);
+      setWordCount(value.trim() ? value.trim().split(/\s+/).length : 0);
+    }
+
     if (autoSaveTimer) {
       clearTimeout(autoSaveTimer);
     }
@@ -141,9 +157,6 @@ const CreateEditPostForm = () => {
 
     try {
       if (isEditMode) {
-        console.log('Editing post with ID:', postId);
-        console.log('Current form data:', formData);
-        
         // In edit mode, send all necessary fields
         const postData = {
           content: formData.content.trim(),
@@ -151,13 +164,10 @@ const CreateEditPostForm = () => {
           departmentid: Number(formData.departmentId)
         };
         
-        console.log('Sending update with data:', postData);
         const updatedPost = await updatePost(postId, postData);
-        console.log('Received updated post:', updatedPost);
         
         if (updatedPost) {
           localStorage.removeItem('postDraft');
-          // Use React Router's navigate instead of window.location
           navigate("/posts/my-posts", { replace: true });
         } else {
           throw new Error("Failed to update post");
@@ -178,7 +188,7 @@ const CreateEditPostForm = () => {
           departmentid: Number(formData.departmentId),
         };
 
-        const newPost = await createPost(postData);
+        await createPost(postData);
         localStorage.removeItem('postDraft');
         navigate("/posts/my-posts", { replace: true });
       }
@@ -203,33 +213,42 @@ const CreateEditPostForm = () => {
 
   if (loading && isEditMode) {
     return (
-      <div className="flex justify-center p-8">
+      <div className="flex justify-center items-center min-h-[400px]">
         <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">
+    <div className="max-w-4xl mx-auto p-4 md:p-6 lg:p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
         {isEditMode ? "Edit Post Content" : "Create New Post"}
       </h1>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          <p>{error}</p>
+        <div className="bg-error-300 dark:bg-error-500/20 border border-error-500 text-error-500 px-4 py-3 rounded-lg mb-6 animate-fadeIn">
+          <p className="font-medium">{error}</p>
         </div>
       )}
 
       {formErrors.submit && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          <p>{formErrors.submit}</p>
+        <div className="bg-error-300 dark:bg-error-500/20 border border-error-500 text-error-500 px-4 py-3 rounded-lg mb-6 animate-fadeIn">
+          <p className="font-medium">{formErrors.submit}</p>
+        </div>
+      )}
+
+      {lastSaved && (
+        <div className="bg-info-300/30 dark:bg-info-500/20 text-info-500 px-4 py-2 rounded-lg mb-4 text-sm flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+          </svg>
+          <span>Draft auto-saved at {lastSaved.toLocaleTimeString()}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {!isEditMode && (
-          <div className="mb-4">
+          <div className="mb-6">
             <Input
               label="Title"
               id="title"
@@ -239,33 +258,49 @@ const CreateEditPostForm = () => {
               placeholder="Enter post title"
               error={formErrors.title}
               required
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+              labelClassName="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
             />
+            {formData.title && (
+              <p className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400">
+                {formData.title.length}/100
+              </p>
+            )}
           </div>
         )}
 
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="content">
+        <div className="mb-6">
+          <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2" htmlFor="content">
             Content
           </label>
-          <textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            placeholder="Write your post content here..."
-            className={`w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline ${
-              formErrors.content ? "border-red-500" : "border-gray-300"
-            }`}
-            rows="8"
-            required
-          />
+          <div className="relative">
+            <textarea
+              id="content"
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              placeholder="Write your post content here..."
+              className={`w-full px-4 py-3 text-gray-700 dark:text-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ease-in-out min-h-[200px] bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 ${
+                formErrors.content ? "border-error-500 focus:border-error-500 focus:ring-error-500" : "border-gray-300 dark:border-gray-600"
+              }`}
+              rows="10"
+              required
+            />
+            <div className="absolute bottom-3 right-3 text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 px-2 py-1 rounded-md">
+              {charCount}/5000
+            </div>
+          </div>
           {formErrors.content && (
-            <p className="text-red-500 text-xs italic">{formErrors.content}</p>
+            <p className="mt-1 text-error-500 text-xs font-medium">{formErrors.content}</p>
           )}
+          <div className="mt-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
+            <span>Words: {wordCount}</span>
+            <span>Characters: {charCount}</span>
+          </div>
         </div>
 
         {!isEditMode && (
-          <div className="mb-4">
+          <div className="mb-6">
             <Input
               label="Tags (comma-separated)"
               id="tags"
@@ -274,25 +309,54 @@ const CreateEditPostForm = () => {
               onChange={handleChange}
               placeholder="Enter tags, separated by commas"
               error={formErrors.tags}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+              labelClassName="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
             />
+            {formErrors.tags && (
+              <p className="mt-1 text-error-500 text-xs font-medium">{formErrors.tags}</p>
+            )}
+            {formData.tags && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {formData.tags.split(',').map((tag, index) => (
+                  tag.trim() && (
+                    <span 
+                      key={index} 
+                      className="inline-block bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 text-xs font-medium px-2.5 py-1 rounded"
+                    >
+                      {tag.trim()}
+                    </span>
+                  )
+                ))}
+              </div>
+            )}
           </div>
         )}
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <Button
             type="button"
             onClick={() => navigate("/posts/my-posts")}
-            className="bg-gray-500 text-white"
+            className="w-full sm:w-auto px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200 ease-in-out"
             disabled={submitting}
           >
             Cancel
           </Button>
           <Button
             type="submit"
-            className="bg-blue-500 text-white"
+            className="w-full sm:w-auto px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 ease-in-out"
             disabled={submitting}
           >
-            {submitting ? "Saving..." : isEditMode ? "Update Content" : "Create Post"}
+            {submitting ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </div>
+            ) : (
+              isEditMode ? "Update Content" : "Create Post"
+            )}
           </Button>
         </div>
       </form>

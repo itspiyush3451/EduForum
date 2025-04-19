@@ -13,37 +13,39 @@ const Button = ({
   className = "",
   ...props
 }) => {
-  // Base styling
+  // Base styling - enhanced for consistency
   const baseStyle =
-    "rounded font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "rounded font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center";
 
-  // Variant styling
+  // Variant styling - updated with theme colors
   const variantStyles = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
-    secondary:
-      "bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400",
-    success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
-    danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
-    warning:
-      "bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-400",
-    outline:
-      "bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500",
-    link: "bg-transparent text-blue-600 hover:underline p-0 focus:ring-0",
+    primary: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-400 dark:bg-blue-600 dark:hover:bg-blue-700",
+    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600",
+    success: "bg-success-500 text-white hover:bg-success-500/90 focus:ring-success-300 dark:bg-success-500 dark:hover:bg-success-500/80",
+    danger: "bg-error-500 text-white hover:bg-error-500/90 focus:ring-error-300 dark:bg-error-500 dark:hover:bg-error-500/80",
+    warning: "bg-warning-500 text-white hover:bg-warning-500/90 focus:ring-warning-300 dark:bg-warning-500 dark:hover:bg-warning-500/80",
+    outline: "bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-50 focus:ring-blue-400 dark:text-blue-300 dark:border-blue-400 dark:hover:bg-blue-900/30",
+    link: "bg-transparent text-blue-500 hover:underline p-0 focus:ring-0 dark:text-blue-300",
+    ghost: "bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300 dark:text-gray-300 dark:hover:bg-gray-800"
   };
 
-  // Size styling
+  // Responsive size styling
   const sizeStyles = {
+    xs: "py-1 px-2 text-xs",
     sm: "py-1 px-3 text-sm",
     md: "py-2 px-4 text-base",
-    lg: "py-3 px-5 text-lg",
+    lg: "py-2.5 px-5 text-lg",
+    xl: "py-3 px-6 text-xl"
   };
 
   // Width styling
   const widthStyle = fullWidth ? "w-full" : "";
 
-  // Disabled styling
+  // Disabled styling with improved visuals
   const disabledStyle =
-    disabled || isLoading ? "opacity-60 cursor-not-allowed" : "cursor-pointer";
+    disabled || isLoading
+      ? "opacity-60 cursor-not-allowed"
+      : "cursor-pointer shadow-sm hover:shadow";
 
   // Combine all styles
   const buttonStyle = `
@@ -105,8 +107,9 @@ Button.propTypes = {
     "warning",
     "outline",
     "link",
+    "ghost"
   ]),
-  size: PropTypes.oneOf(["sm", "md", "lg"]),
+  size: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
   fullWidth: PropTypes.bool,
   isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
