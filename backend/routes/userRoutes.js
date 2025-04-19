@@ -198,9 +198,32 @@ router.delete(
         });
       }
 
-      // Proceed with deletion
-      await prisma.user.delete({
-        where: { username },
+      // Delete all related records in a transaction
+      await prisma.$transaction(async (tx) => {
+        // Delete all posts by the user
+        await tx.post.deleteMany({
+          where: { userid: user.userid },
+        });
+
+        // Delete all comments by the user
+        await tx.comment.deleteMany({
+          where: { userid: user.userid },
+        });
+
+        // Delete all notices by the user
+        await tx.notice.deleteMany({
+          where: { userid: user.userid },
+        });
+
+        // Delete all invalidated tokens for the user
+        await tx.invalidatedToken.deleteMany({
+          where: { userid: user.userid },
+        });
+
+        // Finally, delete the user
+        await tx.user.delete({
+          where: { username },
+        });
       });
 
       res.json({
