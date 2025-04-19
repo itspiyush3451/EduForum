@@ -12,6 +12,7 @@ import StudentSignupPage from "../pages/StudentSignupPage";
 import TeacherSignupPage from "../pages/TeacherSignupPage";
 import AdminSignupPage from "../pages/AdminSignupPage";
 import Dashboard from "../pages/Dashboard";
+import LandingPage from "../pages/LandingPage";
 
 // Import post-related pages
 import AllPosts from "../pages/AllPosts";
@@ -28,6 +29,7 @@ import CreateEditNoticePage from "../pages/CreateEditNoticePage";
 // Import profile and settings pages
 import Settings from "../pages/SettingsPage";
 import UserProfilePage from "../pages/UserProfilePage";
+import FAQ from "../pages/FAQ";
 
 // Import admin pages
 import AdminDashboard from "../pages/AdminDashboard";
@@ -38,6 +40,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<Navigate to="/signup/student" replace />} />
       <Route path="/signup/student" element={<StudentSignupPage />} />
@@ -59,6 +62,7 @@ const AppRoutes = () => {
         >
           {/* Regular user routes */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="/posts/create" element={<CreateEditPostPage />} />
           <Route path="/posts/:postId" element={<PostDetailsPage />} />
           <Route path="/posts/:postId/edit" element={<CreateEditPostPage />} />
@@ -83,11 +87,8 @@ const AppRoutes = () => {
         <Route path="/admin/settings" element={<Settings />} />
       </Route>
 
-      {/* Root redirect */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-
       {/* Catch-all redirect for unknown routes */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

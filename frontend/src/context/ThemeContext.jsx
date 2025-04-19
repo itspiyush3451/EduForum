@@ -4,27 +4,36 @@ import { lightTheme, darkTheme } from '../theme';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+  // Initialize state with localStorage value or default to dark mode
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check if user has a theme preference in localStorage
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
-    }
-    // Check system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
   });
 
   const toggleTheme = () => {
     setIsDarkMode(prev => !prev);
   };
 
+  // Apply theme immediately on mount and when it changes
   useEffect(() => {
     // Save theme preference to localStorage
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     
     // Apply theme to document
     document.documentElement.classList.toggle('dark', isDarkMode);
+    
+    // Set background color based on theme
+    document.body.style.backgroundColor = isDarkMode ? '#1a1a1a' : '#ffffff';
   }, [isDarkMode]);
+
+  // Apply theme immediately on mount
+  useEffect(() => {
+    // Apply theme to document
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    
+    // Set background color based on theme
+    document.body.style.backgroundColor = isDarkMode ? '#1a1a1a' : '#ffffff';
+  }, []);
 
   const theme = isDarkMode ? darkTheme : lightTheme;
 

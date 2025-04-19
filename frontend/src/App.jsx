@@ -7,6 +7,8 @@ import { NoticeProvider } from "./context/NoticeContext";
 import { DepartmentProvider } from "./context/DepartmentContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import AppRoutes from "./routes/AppRoutes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 const App = () => {
@@ -19,6 +21,18 @@ const App = () => {
               <NoticeProvider>
                 <CommentProvider>
                   <AppRoutes />
+                  <ToastContainer
+                    position="bottom-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
                 </CommentProvider>
               </NoticeProvider>
             </PostProvider>
