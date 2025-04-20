@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTheme } from "../context/ThemeContext";
 import Footer from "../components/layout/Footer";
-import Logo from "../components/common/Logo";
 import mainImg from "../assets/main-img.svg";
 import connectImg from "../assets/connect.svg";
+import ThemeLogo from "../components/common/ThemeLogo";
 
 const LandingPage = () => {
   const [navtoggle, setnavtoggle] = useState(false);
@@ -57,11 +57,11 @@ const LandingPage = () => {
           ? (isDarkMode ? 'bg-gray-800/95 backdrop-blur-sm' : 'bg-white/95 backdrop-blur-sm') 
           : (isDarkMode ? 'bg-gray-800' : 'bg-gradient-to-r from-blue-50 to-indigo-50')
       } ${isScrolled ? 'shadow-lg' : ''}`}>
-        <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center py-4">
-          {/* Left side - Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <Logo size="small" className="group-hover:scale-105 transition-transform duration-300" />
-          </Link>
+        <div className="container mx-auto px-3 sm:px-6 flex justify-between items-center py-4">
+          {/* Left side - Logo with fixed dimensions container */}
+          <div className="h-12 flex items-center">
+            <ThemeLogo size="default" />
+          </div>
 
           {/* Right side - Navigation and Theme Toggle */}
           <div className="flex items-center space-x-4">
