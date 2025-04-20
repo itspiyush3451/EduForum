@@ -1,0 +1,246 @@
+# EduForum: Smart Academic Forum & Chatbot System
+## Documentation
+
+### Chapter 1: INTRODUCTION
+
+#### 1.1 Existing System
+The current educational communication landscape faces several challenges:
+- Fragmented communication channels between students and faculty
+- Lack of centralized platform for academic discussions
+- Manual handling of notices and announcements
+- Limited accessibility to academic resources
+- No integrated AI assistance for student queries
+
+#### 1.2 Need for the System
+EduForum addresses these challenges by providing:
+- Centralized platform for academic communication
+- AI-powered chatbot for instant assistance
+- Streamlined notice management system
+- Role-based access control for different user types
+- Integrated forum for academic discussions
+- Real-time notifications and updates
+
+#### 1.3 Scope of Work
+The project scope includes:
+- User authentication and authorization
+- Department management
+- Notice board system
+- Forum discussions
+- AI chatbot integration
+- File management
+- User profile management
+- Analytics and reporting
+
+#### 1.4 Software and Hardware Requirements
+
+**Software Requirements:**
+- Frontend:
+  - React.js (v18.2.0 or higher)
+  - Node.js (v16 or higher)
+  - npm or yarn package manager
+  - Tailwind CSS
+  - Material UI components
+
+- Backend:
+  - Node.js (v16 or higher)
+  - Express.js
+  - PostgreSQL (v12 or higher)
+  - Prisma ORM
+  - JWT for authentication
+
+**Hardware Requirements:**
+- Server:
+  - 2+ CPU cores
+  - 4GB+ RAM
+  - 20GB+ storage
+  - Network connectivity
+
+- Client:
+  - Modern web browser
+  - Internet connection
+  - 2GB+ RAM
+  - 1GB+ free storage
+
+#### 1.5 Detailed Description of Technology Used
+
+**Frontend Technologies:**
+- React.js: UI framework with component-based architecture
+- Tailwind CSS: Utility-first CSS framework
+- Material UI: Component library
+- React Router: Client-side routing
+- Axios: HTTP client for API requests
+- Context API: State management
+- JWT: Authentication handling
+
+**Backend Technologies:**
+- Node.js: Runtime environment
+- Express.js: Web framework
+- PostgreSQL: Relational database
+- Prisma: ORM for database operations
+- JWT: Authentication tokens
+- Multer: File upload handling
+- Passport.js: Authentication middleware
+
+### Chapter 2: PROPOSED SYSTEM
+
+#### 2.1 Proposed System
+EduForum is a comprehensive educational platform that integrates:
+- Smart forum system for academic discussions
+- AI-powered chatbot for instant assistance
+- Centralized notice management
+- Department-based organization
+- Role-based access control
+- File sharing capabilities
+
+#### 2.2 Objectives of the System
+- Enhance academic communication
+- Provide instant AI assistance
+- Streamline notice management
+- Facilitate academic discussions
+- Improve resource accessibility
+- Ensure secure data handling
+- Support multiple user roles
+
+#### 2.3 User Requirements
+
+**i. Functional Requirements:**
+1. User Authentication:
+   - Registration for students, teachers, and admins
+   - Login with email/password or Google OAuth
+   - Password reset functionality
+   - Session management
+
+2. Department Management:
+   - Create and manage departments
+   - Assign users to departments
+   - Configure department settings
+   - Manage department hierarchy
+
+3. Notice Board:
+   - Create and publish notices
+   - Attach files to notices
+   - Set notice visibility
+   - Send notifications
+
+4. Forum System:
+   - Create and manage posts
+   - Comment on posts
+   - Like and share posts
+   - Category-based organization
+
+5. AI Chatbot:
+   - Answer academic queries
+   - Provide resource recommendations
+   - Handle department-specific questions
+   - Support file attachments
+
+**ii. Non-Functional Requirements:**
+1. Performance:
+   - Page load time < 2 seconds
+   - API response time < 500ms
+   - Support for 1000+ concurrent users
+
+2. Security:
+   - End-to-end encryption
+   - Role-based access control
+   - Secure file handling
+   - Regular security audits
+
+3. Scalability:
+   - Horizontal scaling capability
+   - Load balancing support
+   - Database optimization
+   - Caching implementation
+
+4. Usability:
+   - Responsive design
+   - Intuitive interface
+   - Accessibility compliance
+   - Multi-language support
+
+### Chapter 3: SYSTEM DESIGN
+
+#### 3.7 Database Structure
+
+**User Table:**
+CREATE TABLE User (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('STUDENT', 'TEACHER', 'ADMIN') NOT NULL,
+  department_id INTEGER REFERENCES Department(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+**Department Table:**
+CREATE TABLE Department (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+**Notice Table:**
+CREATE TABLE Notice (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  department_id INTEGER REFERENCES Department(id),
+  created_by INTEGER REFERENCES User(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+**Post Table:**
+CREATE TABLE Post (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  user_id INTEGER REFERENCES User(id),
+  department_id INTEGER REFERENCES Department(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+**Comment Table:**
+CREATE TABLE Comment (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL,
+  post_id INTEGER REFERENCES Post(id),
+  user_id INTEGER REFERENCES User(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+### Chapter 5: CONCLUSION
+
+EduForum successfully addresses the challenges in academic communication by providing a comprehensive platform that integrates forum discussions, AI assistance, and notice management. The system's modular architecture, robust security measures, and scalable design make it suitable for educational institutions of various sizes.
+
+Key achievements:
+- Seamless integration of AI chatbot
+- Efficient notice management system
+- Role-based access control
+- Secure file handling
+- Real-time notifications
+- Responsive user interface
+
+Future enhancements could include:
+- Mobile application development
+- Advanced analytics
+- Machine learning integration
+- Real-time collaboration features
+- Enhanced chatbot capabilities
+- Learning management system integration
+
+### Chapter 6: REFERENCES
+
+1. React.js Documentation: https://reactjs.org/docs
+2. Node.js Documentation: https://nodejs.org/en/docs
+3. PostgreSQL Documentation: https://www.postgresql.org/docs
+4. Prisma Documentation: https://www.prisma.io/docs
+5. Express.js Documentation: https://expressjs.com
+6. Tailwind CSS Documentation: https://tailwindcss.com/docs
+7. Material UI Documentation: https://mui.com
+8. JWT Documentation: https://jwt.io/introduction 
