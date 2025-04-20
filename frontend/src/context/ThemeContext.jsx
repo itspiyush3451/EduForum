@@ -26,15 +26,6 @@ export const ThemeProvider = ({ children }) => {
     document.body.style.backgroundColor = isDarkMode ? '#1a1a1a' : '#ffffff';
   }, [isDarkMode]);
 
-  // Apply theme immediately on mount
-  useEffect(() => {
-    // Apply theme to document
-    document.documentElement.classList.toggle('dark', isDarkMode);
-    
-    // Set background color based on theme
-    document.body.style.backgroundColor = isDarkMode ? '#1a1a1a' : '#ffffff';
-  }, []);
-
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
