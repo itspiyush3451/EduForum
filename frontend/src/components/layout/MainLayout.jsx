@@ -3,7 +3,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
-import Logo from '../common/Logo';
 import NavbarComponent from "../layout/NavbarComponent";
 import SidebarComponent from "../layout/SidebarComponent";
 import Footer from "../layout/Footer";
@@ -31,9 +30,6 @@ const MainLayout = () => {
       <header className={`sticky top-0 z-50 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <Logo size="default" className="mr-4" />
-            </div>
             <NavbarComponent />
           </div>
         </div>
