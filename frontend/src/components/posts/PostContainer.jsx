@@ -268,7 +268,7 @@ const PostContainer = () => {
                     value={newPostTitle}
                     onChange={(e) => setNewPostTitle(e.target.value)}
                     placeholder="Add a title"
-                    className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 p-2 focus:outline-none focus:border-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
+                    className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 p-2 focus:outline-none focus:border-blue-500 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                   {formErrors.title && (
                     <p className="text-red-500 text-sm">{formErrors.title}</p>
@@ -278,7 +278,7 @@ const PostContainer = () => {
                     value={newPostContent}
                     onChange={(e) => setNewPostContent(e.target.value)}
                     placeholder="What's happening?"
-                    className="w-full bg-transparent border-none p-2 focus:outline-none resize-none text-gray-900 dark:text-white placeholder-gray-500"
+                    className="w-full bg-transparent border-none p-2 focus:outline-none resize-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                     rows={3}
                   />
                   {formErrors.content && (
@@ -290,7 +290,7 @@ const PostContainer = () => {
                     value={newPostTags}
                     onChange={(e) => setNewPostTags(e.target.value)}
                     placeholder="Add tags (comma-separated)"
-                    className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 p-2 focus:outline-none focus:border-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
+                    className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 p-2 focus:outline-none focus:border-blue-500 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
               </div>
@@ -342,7 +342,7 @@ const PostContainer = () => {
             <div className="flex">
               <div className="flex-shrink-0 mr-3">
                 <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
-                  <span className="text-white font-medium">
+                  <span className="text-white !text-white font-medium">
                     {userNames[post.userid]?.[0]?.toUpperCase() || 'A'}
                   </span>
                 </div>
@@ -449,17 +449,15 @@ const PostContainer = () => {
                           const userInitial = commentUser[0]?.toUpperCase() || 'A';
                           
                           return (
-                            <div
-                              key={comment.commentid}
-                              className="flex group"
-                            >
+                            <div key={comment.commentid} className="flex">
                               <div className="flex-shrink-0 mr-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 dark:from-gray-600 dark:to-gray-800 flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
                                   <span className="text-white text-sm font-medium">
                                     {userInitial}
                                   </span>
                                 </div>
                               </div>
+                              
                               <div className="flex-grow">
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center">
@@ -467,12 +465,10 @@ const PostContainer = () => {
                                       {commentUser}
                                     </span>
                                     <span className="ml-2 text-gray-500 dark:text-gray-400 text-xs">
-                                      {comment.timestamp ? new Date(comment.timestamp).toLocaleDateString("en-US", {
+                                      {new Date(comment.timestamp).toLocaleDateString("en-US", {
                                         month: "short",
-                                        day: "numeric",
-                                        hour: "numeric",
-                                        minute: "numeric"
-                                      }) : 'Just now'}
+                                        day: "numeric"
+                                      })}
                                     </span>
                                   </div>
                                   
