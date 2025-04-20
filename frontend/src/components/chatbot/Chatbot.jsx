@@ -3,6 +3,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 import { MessageCircle, Send, User, Bot, ChevronDown, Moon, Sun, HelpCircle, Sparkles, Brain, Star } from 'lucide-react';
+import botimg from '../../assets/botimg.png';
 
 const Chatbot = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -142,7 +143,7 @@ const Chatbot = () => {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-white tracking-wide">
-                  Jarvis
+                  EduBot
                 </h2>
                 <p 
                   className="text-xs opacity-80"
@@ -175,22 +176,22 @@ const Chatbot = () => {
       </div>
 
       {isMinimized ? (
-        <div className={`flex items-center justify-center p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'}`}
-             style={{ 
-               backgroundImage: isDarkMode 
-                 ? 'radial-gradient(circle at 10% 20%, rgba(21, 25, 40, 0.8) 0%, rgba(43, 46, 60, 0.4) 90.1%)' 
-                 : 'radial-gradient(circle at 10% 20%, rgba(236, 241, 253, 0.8) 0%, rgba(250, 252, 255, 0.4) 90.1%)'
-             }}>
-          <div className="text-center animate-pulse">
-            <div className={`mx-auto w-12 h-12 mb-2 rounded-full flex items-center justify-center ${
-              isDarkMode ? 'bg-gradient-to-br from-blue-600 to-purple-700' : 'bg-gradient-to-br from-blue-500 to-purple-500'
-            } shadow-lg`}>
-              <Brain size={24} className="text-white" />
-            </div>
-            <p className={`text-xs font-medium ${isDarkMode ? 'text-blue-200' : 'text-blue-600'}`}>
-              Click to expand chat
-            </p>
-          </div>
+        <div 
+          className={`flex items-center justify-center cursor-pointer ${
+            isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+          } relative h-full`}
+          onClick={() => setIsMinimized(false)}
+          style={{ 
+            backgroundImage: isDarkMode 
+              ? 'radial-gradient(circle at 10% 20%, rgba(21, 25, 40, 0.8) 0%, rgba(43, 46, 60, 0.4) 90.1%)' 
+              : 'radial-gradient(circle at 10% 20%, rgba(236, 241, 253, 0.8) 0%, rgba(250, 252, 255, 0.4) 90.1%)'
+          }}
+        >
+          <img 
+            src={botimg} 
+            alt="Chatbot" 
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
         </div>
       ) : (
         <>
