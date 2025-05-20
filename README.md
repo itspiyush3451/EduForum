@@ -29,17 +29,17 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
   <tr>
     <td width="50%">
       <img src="UI_IMG/StudentRegisteration.jpg" alt="Student Registration" width="100%"/>
-      <p align="center"><strong>Student Registration</strong><br/><em>Streamlined student onboarding process</em></p>
+      <p align="center"><strong>Student Registration</strong></p>
     </td>
     <td width="50%">
       <img src="UI_IMG/TeacherRegisteration.jpg" alt="Teacher Registration" width="100%"/>
-      <p align="center"><strong>Teacher Registration</strong><br/><em>Faculty account creation with department selection</em></p>
+      <p align="center"><strong>Teacher Registration</strong></p>
     </td>
   </tr>
   <tr>
     <td width="50%">
       <img src="UI_IMG/AdminRegisterationPage.jpg" alt="Admin Registration" width="100%"/>
-      <p align="center"><strong>Admin Registration</strong><br/><em>Administrative account setup with elevated privileges</em></p>
+      <p align="center"><strong>Admin Registration</strong></p>
     </td>
     <td width="50%">
       <img src="UI_IMG/AdminProtecttionWrapper(Before%20Admin%20Registeration).jpg" alt="Admin Protection" width="100%"/>
@@ -59,15 +59,15 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
   <tr>
     <td width="33%">
       <img src="UI_IMG/AdminDashboard.jpg" alt="Admin Dashboard" width="100%"/>
-      <p align="center"><strong>Admin Dashboard</strong><br/><em>Complete system management</em></p>
+      <p align="center"><strong>Admin Dashboard</strong></p>
     </td>
     <td width="33%">
       <img src="UI_IMG/StudentsDashboardd.jpg" alt="Student Dashboard" width="100%"/>
-      <p align="center"><strong>Student Dashboard</strong><br/><em>Personalized learning hub</em></p>
+      <p align="center"><strong>Student Dashboard</strong></p>
     </td>
     <td width="33%">
       <img src="UI_IMG/TeachersDashboard.jpg" alt="Teacher Dashboard" width="100%"/>
-      <p align="center"><strong>Teacher Dashboard</strong><br/><em>Faculty resource center</em></p>
+      <p align="center"><strong>Teacher Dashboard</strong></p>
     </td>
   </tr>
 </table>
@@ -80,15 +80,15 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
   <tr>
     <td width="33%">
       <img src="UI_IMG/AllPosts.jpg" alt="All Posts" width="100%"/>
-      <p align="center"><strong>All Forum Posts</strong><br/><em>Centralized academic discussions</em></p>
+      <p align="center"><strong>All Forum Posts</strong><br/></p>
     </td>
     <td width="33%">
       <img src="UI_IMG/MyPosts.jpg" alt="My Posts" width="100%"/>
-      <p align="center"><strong>My Posts</strong><br/><em>Personal contribution tracking</em></p>
+      <p align="center"><strong>My Posts</strong><br/></p>
     </td>
     <td width="33%">
       <img src="UI_IMG/Notices.jpg" alt="Notices" width="100%"/>
-      <p align="center"><strong>Notices Board</strong><br/><em>Important announcements feed</em></p>
+      <p align="center"><strong>Notices Board</strong><br/></p>
     </td>
   </tr>
 </table>
@@ -97,11 +97,11 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
   <tr>
     <td width="50%">
       <img src="UI_IMG/NoticesForTeacher.jpg" alt="Notices For Teachers" width="100%"/>
-      <p align="center"><strong>Teacher Notices</strong><br/><em>Faculty-specific announcements</em></p>
+      <p align="center"><strong>Teacher Notices</strong><br/></p>
     </td>
     <td width="50%">
       <img src="UI_IMG/CreateNotice.jpg" alt="Create Notice" width="100%"/>
-      <p align="center"><strong>Notice Creation</strong><br/><em>Intuitive announcement publishing interface</em></p>
+      <p align="center"><strong>Notice Creation</strong><br/></p>
     </td>
   </tr>
 </table>
@@ -114,11 +114,11 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
   <tr>
     <td width="33%">
       <img src="UI_IMG/UserManagement.jpg" alt="User Management" width="100%"/>
-      <p align="center"><strong>User Management</strong><br/><em>Comprehensive user account administration</em></p>
+      <p align="center"><strong>User Management</strong><br/></p>
     </td>
     <td width="33%">
       <img src="UI_IMG/DepartmentManagement.jpg" alt="Department Management" width="100%"/>
-      <p align="center"><strong>Department Management</strong><br/><em>Academic department configuration</em></p>
+      <p align="center"><strong>Department Management</strong></p>
     </td>
     <td width="33%">
       <img src="UI_IMG/Settings.jpg" alt="Settings" width="100%"/>
