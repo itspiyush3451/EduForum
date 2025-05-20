@@ -4,7 +4,8 @@
 
 EduForum is a web-based platform designed to facilitate academic discussions, knowledge sharing, and interactive learning. The system integrates a **smart AI chatbot** to assist students and educators with queries, making communication seamless and efficient.
 
-![Alt](DASHBOARD.jpg)
+![Dashboard Overview](DASHBOARD.jpg)
+
 ## Features
 
 - **User Authentication**: Secure login and signup system
@@ -13,6 +14,39 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 - **AI Chatbot**: Instant AI-powered assistance
 - **Settings Management**: Customizable user preferences
 - **User Dashboard**: Personalized feed of notices, discussions, and more
+
+## UI Screenshots
+
+### Authentication & Registration
+| Login Page | Student Registration | Teacher Registration |
+|:---:|:---:|:---:|
+| ![Login Page](UI_IMG/LoginPage.jpg) | ![Student Registration](UI_IMG/StudentRegisteration.jpg) | ![Teacher Registration](UI_IMG/TeacherRegisteration.jpg) |
+
+| Admin Registration | Admin Protection Wrapper |
+|:---:|:---:|
+| ![Admin Registration](UI_IMG/AdminRegisterationPage.jpg) | ![Admin Protection](UI_IMG/AdminProtecttionWrapper(Before%20Admin%20Registeration).jpg) |
+
+### User Dashboards
+| Admin Dashboard | Student Dashboard | Teacher Dashboard |
+|:---:|:---:|:---:|
+| ![Admin Dashboard](UI_IMG/AdminDashboard.jpg) | ![Student Dashboard](UI_IMG/StudentsDashboardd.jpg) | ![Teacher Dashboard](UI_IMG/TeachersDashboard.jpg) |
+
+### Communication & Content Management
+| All Posts | My Posts | Notices |
+|:---:|:---:|:---:|
+| ![All Posts](UI_IMG/AllPosts.jpg) | ![My Posts](UI_IMG/MyPosts.jpg) | ![Notices](UI_IMG/Notices.jpg) |
+
+| Notices For Teachers | Create Notice |
+|:---:|:---:|
+| ![Notices For Teachers](UI_IMG/NoticesForTeacher.jpg) | ![Create Notice](UI_IMG/CreateNotice.jpg) |
+
+### Administration & Settings
+| User Management | Department Management | Settings |
+|:---:|:---:|:---:|
+| ![User Management](UI_IMG/UserManagement.jpg) | ![Department Management](UI_IMG/DepartmentManagement.jpg) | ![Settings](UI_IMG/Settings.jpg) |
+
+### Support
+![FAQ Page](UI_IMG/FAQ.jpg)
 
 ## Tech Stack
 
