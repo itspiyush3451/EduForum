@@ -23,7 +23,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 
 #### Login Screen
 <img src="UI_IMG/LoginPage.jpg" alt="Login Page" width="700px"/>
-<p><em>Secure authentication with institutional email support</em></p>
+
 
 <table>
   <tr>
