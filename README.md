@@ -4,6 +4,7 @@
 
 EduForum is a web-based platform designed to facilitate academic discussions, knowledge sharing, and interactive learning. The system integrates a **smart AI chatbot** to assist students and educators with queries, making communication seamless and efficient.
 
+![Alt](DASHBOARD.jpg)
 ## Features
 
 - **User Authentication**: Secure login and signup system
