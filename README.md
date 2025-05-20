@@ -22,7 +22,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 |:---:|:---:|:---:|
 | ![Login Page](UI_IMG/LoginPage.jpg) | ![Student Registration](UI_IMG/StudentRegisteration.jpg) | ![Teacher Registration](UI_IMG/TeacherRegisteration.jpg) |
 
-| Admin Protection Wrapper | Admin Registration |Admin Protection Wrapper
+| Admin Protection Wrapper | Admin Registration |
 |:---:|:---:|
 | ![Admin Protection](UI_IMG/AdminProtecttionWrapper(Before%20Admin%20Registeration).jpg) | ![Admin Registration](UI_IMG/AdminRegisterationPage.jpg) |
 
