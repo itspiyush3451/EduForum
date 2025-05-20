@@ -122,7 +122,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
     </td>
     <td width="33%">
       <img src="UI_IMG/Settings.jpg" alt="Settings" width="100%"/>
-      <p align="center"><strong>Settings Panel</strong><br/><em>Personalized system preferences</em></p>
+      <p align="center"><strong>Settings Panel</strong></p>
     </td>
   </tr>
 </table>
