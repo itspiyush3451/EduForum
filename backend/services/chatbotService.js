@@ -95,17 +95,27 @@ const findRelevantInfo = (message) => {
   if (lowercaseMsg.includes('fee') || lowercaseMsg.includes('cost') || lowercaseMsg.includes('charges')) {
     const feeResponses = [
       `Fee Structure:\n
-      Course: ${collegeData.fees.mca}\n
-      Hostel:\n
+      MCA Course Fees:\n
+      - General Category: ${collegeData.fees.mca.general}\n
+      - OBC Category: ${collegeData.fees.mca.obc}\n
+      - SEBC Category: ${collegeData.fees.mca.sebc}\n
+      - SC/ST Category: ${collegeData.fees.mca.sc_st}\n
+      - VJNT Category: ${collegeData.fees.mca.vjnt}\n
+      Hostel Fees:\n
       - Boys: ${collegeData.fees.hostel.boys}\n
       - Girls: ${collegeData.fees.hostel.girls}\n
-      Bus: ${collegeData.fees.bus}`,
+      Bus Fee: ${collegeData.fees.bus}`,
       
-      `Fees:\n
-      MCA: ${collegeData.fees.mca}\n
-      Hostel:\n
-      - Boys: ${collegeData.fees.hostel.boys}\n
-      - Girls: ${collegeData.fees.hostel.girls}\n
+      `Fees Information:\n
+      MCA Program:\n
+      - General: ${collegeData.fees.mca.general}\n
+      - OBC: ${collegeData.fees.mca.obc}\n
+      - SEBC: ${collegeData.fees.mca.sebc}\n
+      - SC/ST: ${collegeData.fees.mca.sc_st}\n
+      - VJNT: ${collegeData.fees.mca.vjnt}\n
+      Accommodation:\n
+      - Boys Hostel: ${collegeData.fees.hostel.boys}\n
+      - Girls Hostel: ${collegeData.fees.hostel.girls}\n
       Transport: ${collegeData.fees.bus}`
     ];
     return getRandomResponse(feeResponses);
@@ -118,13 +128,25 @@ const findRelevantInfo = (message) => {
       Mode: ${collegeData.classes.mode}\n
       Timing: ${collegeData.classes.timing}\n
       Labs: ${collegeData.classes.labs.join(', ')}\n
-      Extra: ${collegeData.classes.extra_classes}`,
+      Extra: ${collegeData.classes.extra_classes}\n
+      Weekly Timetable:\n
+      Monday: ${collegeData.classes.timetable.monday.join(', ')}\n
+      Tuesday: ${collegeData.classes.timetable.tuesday.join(', ')}\n
+      Wednesday: ${collegeData.classes.timetable.wednesday.join(', ')}\n
+      Thursday: ${collegeData.classes.timetable.thursday.join(', ')}\n
+      Friday: ${collegeData.classes.timetable.friday.join(', ')}`,
       
       `Class Info:\n
       Mode: ${collegeData.classes.mode}\n
       Time: ${collegeData.classes.timing}\n
       Labs: ${collegeData.classes.labs.join(', ')}\n
-      Additional: ${collegeData.classes.extra_classes}`
+      Additional: ${collegeData.classes.extra_classes}\n
+      Schedule:\n
+      - Monday: ${collegeData.classes.timetable.monday.join(', ')}\n
+      - Tuesday: ${collegeData.classes.timetable.tuesday.join(', ')}\n
+      - Wednesday: ${collegeData.classes.timetable.wednesday.join(', ')}\n
+      - Thursday: ${collegeData.classes.timetable.thursday.join(', ')}\n
+      - Friday: ${collegeData.classes.timetable.friday.join(', ')}`
     ];
     return getRandomResponse(classResponses);
   }
@@ -165,18 +187,30 @@ const findRelevantInfo = (message) => {
   if (lowercaseMsg.includes('placement') || lowercaseMsg.includes('job') || lowercaseMsg.includes('package') || lowercaseMsg.includes('company')) {
     const placementResponses = [
       `Placements:\n
-      Ratio: ${collegeData.placements.ratio}\n
-      Average: ${collegeData.placements.average_package}\n
-      Highest: ${collegeData.placements.highest_package}\n
-      Companies: ${collegeData.placements.top_companies.join(', ')}\n
+      Success Rate: ${collegeData.placements.ratio}\n
+      Average Package: ${collegeData.placements.average_package}\n
+      Highest Package: ${collegeData.placements.highest_package}\n
+      Top Companies:\n
+      ${collegeData.placements.top_companies.map(company => 
+        `${company}:\n
+        Role: ${collegeData.placements.company_info[company].role}\n
+        Package: ${collegeData.placements.company_info[company].package}\n
+        Requirements: ${collegeData.placements.company_info[company].requirements}`
+      ).join('\n\n')}\n
       Support: ${collegeData.placements.support}`,
       
       `Career Info:\n
-      Success Rate: ${collegeData.placements.ratio}\n
+      Placement Rate: ${collegeData.placements.ratio}\n
       Avg Salary: ${collegeData.placements.average_package}\n
       Top Offer: ${collegeData.placements.highest_package}\n
-      Recruiters: ${collegeData.placements.top_companies.join(', ')}\n
-      Support: ${collegeData.placements.support}`
+      Company Details:\n
+      ${collegeData.placements.top_companies.map(company => 
+        `- ${company}\n
+         Position: ${collegeData.placements.company_info[company].role}\n
+         Salary: ${collegeData.placements.company_info[company].package}\n
+         Skills: ${collegeData.placements.company_info[company].requirements}`
+      ).join('\n\n')}\n
+      Career Support: ${collegeData.placements.support}`
     ];
     return getRandomResponse(placementResponses);
   }

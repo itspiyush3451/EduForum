@@ -23,7 +23,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Add relations ✅
   posts     Post[]
   comments  Comment[]
   notices   Notice[]
