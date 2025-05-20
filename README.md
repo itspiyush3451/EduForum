@@ -15,38 +15,125 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 - **Settings Management**: Customizable user preferences
 - **User Dashboard**: Personalized feed of notices, discussions, and more
 
-## UI Screenshots
+## 📸 UI Screenshots
 
-### Authentication & Registration
-| Login Page | Student Registration | Teacher Registration |
-|:---:|:---:|:---:|
-| ![Login Page](UI_IMG/LoginPage.jpg) | ![Student Registration](UI_IMG/StudentRegisteration.jpg) | ![Teacher Registration](UI_IMG/TeacherRegisteration.jpg) |
+### 🔐 Authentication & Registration
 
-| Admin Protection Wrapper | Admin Registration |
-|:---:|:---:|
-| ![Admin Protection](UI_IMG/AdminProtecttionWrapper(Before%20Admin%20Registeration).jpg) | ![Admin Registration](UI_IMG/AdminRegisterationPage.jpg) |
+<div align="center">
 
-### User Dashboards
-| Admin Dashboard | Student Dashboard | Teacher Dashboard |
-|:---:|:---:|:---:|
-| ![Admin Dashboard](UI_IMG/AdminDashboard.jpg) | ![Student Dashboard](UI_IMG/StudentsDashboardd.jpg) | ![Teacher Dashboard](UI_IMG/TeachersDashboard.jpg) |
+#### Login Screen
+<img src="UI_IMG/LoginPage.jpg" alt="Login Page" width="700px"/>
+<p><em>Secure authentication with institutional email support</em></p>
 
-### Communication & Content Management
-| All Posts | My Posts | Notices |
-|:---:|:---:|:---:|
-| ![All Posts](UI_IMG/AllPosts.jpg) | ![My Posts](UI_IMG/MyPosts.jpg) | ![Notices](UI_IMG/Notices.jpg) |
+<table>
+  <tr>
+    <td width="50%">
+      <img src="UI_IMG/StudentRegisteration.jpg" alt="Student Registration" width="100%"/>
+      <p align="center"><strong>Student Registration</strong><br/><em>Streamlined student onboarding process</em></p>
+    </td>
+    <td width="50%">
+      <img src="UI_IMG/TeacherRegisteration.jpg" alt="Teacher Registration" width="100%"/>
+      <p align="center"><strong>Teacher Registration</strong><br/><em>Faculty account creation with department selection</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="UI_IMG/AdminRegisterationPage.jpg" alt="Admin Registration" width="100%"/>
+      <p align="center"><strong>Admin Registration</strong><br/><em>Administrative account setup with elevated privileges</em></p>
+    </td>
+    <td width="50%">
+      <img src="UI_IMG/AdminProtecttionWrapper(Before%20Admin%20Registeration).jpg" alt="Admin Protection" width="100%"/>
+      <p align="center"><strong>Admin Protection Layer</strong><br/><em>Enhanced security for administrator registration</em></p>
+    </td>
+  </tr>
+</table>
+</div>
 
-| Notices For Teachers | Create Notice |
-|:---:|:---:|
-| ![Notices For Teachers](UI_IMG/NoticesForTeacher.jpg) | ![Create Notice](UI_IMG/CreateNotice.jpg) |
+### 📊 User Dashboards
 
-### Administration & Settings
-| User Management | Department Management | Settings |
-|:---:|:---:|:---:|
-| ![User Management](UI_IMG/UserManagement.jpg) | ![Department Management](UI_IMG/DepartmentManagement.jpg) | ![Settings](UI_IMG/Settings.jpg) |
+<div align="center">
+<table>
+  <tr>
+    <td colspan="3"><h4>Role-Based Dashboard Interfaces</h4></td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <img src="UI_IMG/AdminDashboard.jpg" alt="Admin Dashboard" width="100%"/>
+      <p align="center"><strong>Admin Dashboard</strong><br/><em>Complete system management</em></p>
+    </td>
+    <td width="33%">
+      <img src="UI_IMG/StudentsDashboardd.jpg" alt="Student Dashboard" width="100%"/>
+      <p align="center"><strong>Student Dashboard</strong><br/><em>Personalized learning hub</em></p>
+    </td>
+    <td width="33%">
+      <img src="UI_IMG/TeachersDashboard.jpg" alt="Teacher Dashboard" width="100%"/>
+      <p align="center"><strong>Teacher Dashboard</strong><br/><em>Faculty resource center</em></p>
+    </td>
+  </tr>
+</table>
+</div>
 
-### Support
-![FAQ Page](UI_IMG/FAQ.jpg)
+### 📝 Communication & Content Management
+
+<div align="center">
+<table>
+  <tr>
+    <td width="33%">
+      <img src="UI_IMG/AllPosts.jpg" alt="All Posts" width="100%"/>
+      <p align="center"><strong>All Forum Posts</strong><br/><em>Centralized academic discussions</em></p>
+    </td>
+    <td width="33%">
+      <img src="UI_IMG/MyPosts.jpg" alt="My Posts" width="100%"/>
+      <p align="center"><strong>My Posts</strong><br/><em>Personal contribution tracking</em></p>
+    </td>
+    <td width="33%">
+      <img src="UI_IMG/Notices.jpg" alt="Notices" width="100%"/>
+      <p align="center"><strong>Notices Board</strong><br/><em>Important announcements feed</em></p>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="UI_IMG/NoticesForTeacher.jpg" alt="Notices For Teachers" width="100%"/>
+      <p align="center"><strong>Teacher Notices</strong><br/><em>Faculty-specific announcements</em></p>
+    </td>
+    <td width="50%">
+      <img src="UI_IMG/CreateNotice.jpg" alt="Create Notice" width="100%"/>
+      <p align="center"><strong>Notice Creation</strong><br/><em>Intuitive announcement publishing interface</em></p>
+    </td>
+  </tr>
+</table>
+</div>
+
+### ⚙️ Administration & Settings
+
+<div align="center">
+<table>
+  <tr>
+    <td width="33%">
+      <img src="UI_IMG/UserManagement.jpg" alt="User Management" width="100%"/>
+      <p align="center"><strong>User Management</strong><br/><em>Comprehensive user account administration</em></p>
+    </td>
+    <td width="33%">
+      <img src="UI_IMG/DepartmentManagement.jpg" alt="Department Management" width="100%"/>
+      <p align="center"><strong>Department Management</strong><br/><em>Academic department configuration</em></p>
+    </td>
+    <td width="33%">
+      <img src="UI_IMG/Settings.jpg" alt="Settings" width="100%"/>
+      <p align="center"><strong>Settings Panel</strong><br/><em>Personalized system preferences</em></p>
+    </td>
+  </tr>
+</table>
+</div>
+
+### 🤔 Support & Help
+
+<div align="center">
+<img src="UI_IMG/FAQ.jpg" alt="FAQ Page" width="700px"/>
+<p><em>Comprehensive FAQ section for user assistance and guidance</em></p>
+</div>
 
 ## Tech Stack
 
