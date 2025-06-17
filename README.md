@@ -15,9 +15,9 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 - **Settings Management**: Customizable user preferences
 - **User Dashboard**: Personalized feed of notices, discussions, and more
 
-## 📸 UI Screenshots
+##  UI Screenshots
 
-### 🔐 Authentication & Registration
+###  Authentication & Registration
 
 <div align="center">
 
@@ -49,7 +49,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 </table>
 </div>
 
-### 📊 User Dashboards
+###  User Dashboards
 
 <div align="center">
 <table>
@@ -73,7 +73,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 </table>
 </div>
 
-### 📝 Communication & Content Management
+###  Communication & Content Management
 
 <div align="center">
 <table>
@@ -107,7 +107,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 </table>
 </div>
 
-### ⚙️ Administration & Settings
+###  Administration & Settings
 
 <div align="center">
 <table>
@@ -128,7 +128,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 </table>
 </div>
 
-### 🤔 Support & Help
+###  Support & Help
 
 <div align="center">
 <img src="UI_IMG/FAQ.jpg" alt="FAQ Page" width="700px"/>
@@ -166,7 +166,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
 - **Context Management**: Maintaining conversation context
 - **Learning System**: Improving responses based on user interactions
 
-## 🚀 Installation Guide
+##  Installation Guide
 
 ### Prerequisites
 
@@ -252,7 +252,7 @@ CHATBOT_MODEL_PATH=path_to_your_chatbot_model
 CHATBOT_TRAINING_DATA=path_to_training_data
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ### Frontend
 
@@ -287,7 +287,7 @@ backend/
 └── uploads/           # File uploads
 ```
 
-## 🤖 Chatbot Features
+##  Chatbot Features
 
 ### Core Capabilities
 
@@ -311,7 +311,7 @@ backend/
 - **Knowledge Base**: Department-specific information storage
 - **Learning System**: Continuous improvement through user interactions
 
-## 📚 API Documentation
+##  API Documentation
 
 The API documentation is available at `http://localhost:3000/api-docs` when running the backend server. It includes detailed information about:
 
@@ -326,7 +326,7 @@ The API documentation is available at `http://localhost:3000/api-docs` when runn
   - Context management
   - Learning system
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -334,11 +334,11 @@ The API documentation is available at `http://localhost:3000/api-docs` when runn
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 This project is open-source and available under the MIT License.
 
-## 🔗 Resources
+##  Resources
 
 - [React](https://reactjs.org/)
 - [Node.js](https://nodejs.org/)
