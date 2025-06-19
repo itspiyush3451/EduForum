@@ -223,7 +223,7 @@ EduForum is a web-based platform designed to facilitate academic discussions, kn
    - Frontend: `http://localhost:5173`
    - Backend API: `http://localhost:3000`
 
-## 🔧 Environment Setup
+##  Environment Setup
 
 ### Frontend (.env)
 
