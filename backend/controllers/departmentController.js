@@ -4,7 +4,7 @@ import * as departmentService from "../services/departmentService.js";
 export async function createDepartment(req, res) {
   try {
     const { name, description } = req.body;
-    
+
     // Validate required fields
     if (!name) {
       return res
@@ -13,23 +13,27 @@ export async function createDepartment(req, res) {
     }
 
     // Pass the data as an object to match the service's validation schema
-    const result = await departmentService.createDepartment({ name, description });
-    
+    const result = await departmentService.createDepartment({
+      name,
+      description,
+    });
+
     if (result.success) {
       res.status(201).json({
         success: true,
         message: "Department created successfully",
-        data: result.data
+        data: result.data,
       });
     } else {
       res.status(400).json(result);
     }
   } catch (error) {
     console.error("Error in createDepartment:", error);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: "Internal server error",
-      details: process.env.NODE_ENV === "development" ? error.message : undefined
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 }
@@ -39,16 +43,24 @@ export async function getAllDepartments(req, res) {
   try {
     const result = await departmentService.getAllDepartments();
     console.log("Backend departments result:", result);
-    
+
     if (result.success) {
       // Send just the departments array
       res.status(200).json(result.data);
     } else {
-      res.status(400).json({ success: false, message: "Failed to fetch departments", data: [] });
+      res
+        .status(400)
+        .json({
+          success: false,
+          message: "Failed to fetch departments",
+          data: [],
+        });
     }
   } catch (error) {
     console.error("Error in getAllDepartments:", error);
-    res.status(500).json({ success: false, message: "Internal server error", data: [] });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal server error", data: [] });
   }
 }
 

@@ -33,10 +33,10 @@ const SignupForm = ({ userRole }) => {
       if (formData.usertype === "ADMIN") {
         return;
       }
-      
+
       try {
         const response = await departmentService.getAllDepartments();
-        console.log('Department response:', response); // Add logging
+        console.log("Department response:", response); // Add logging
         if (Array.isArray(response)) {
           setDepartments(response);
         } else if (response && Array.isArray(response.data)) {
@@ -81,18 +81,22 @@ const SignupForm = ({ userRole }) => {
 
       // Always add departmentid for non-admin users
       if (formData.usertype !== "ADMIN") {
-        if (!formData.departmentid) {
+        if (!formData.departmentid || formData.departmentid === "") {
           setErrorMessage("Please select a department");
           setIsLoading(false);
           return;
         }
-        // Ensure departmentid is a number
-        apiData.departmentid = Number(formData.departmentid);
-        if (isNaN(apiData.departmentid)) {
+        // Ensure departmentid is a valid number
+        const deptId = Number(formData.departmentid);
+        if (isNaN(deptId) || deptId <= 0) {
           setErrorMessage("Invalid department selected");
           setIsLoading(false);
           return;
         }
+        apiData.departmentid = deptId;
+      } else {
+        // For admin users, explicitly set to null
+        apiData.departmentid = null;
       }
 
       console.log("Submitting signup data:", apiData);
@@ -108,20 +112,26 @@ const SignupForm = ({ userRole }) => {
         // Navigate to login page with success message
         navigate("/login?signupSuccess=true");
       } else {
-        setErrorMessage(
-          response.message || "Signup failed. Please try again."
-        );
+        setErrorMessage(response.message || "Signup failed. Please try again.");
       }
     } catch (error) {
       console.error("Error signing up:", error);
+      console.error("Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+
       if (error.response?.data) {
         setErrorMessage(
-          error.response.data.message || 
-          error.response.data.error || 
-          "An error occurred during signup. Please try again."
+          error.response.data.message ||
+            error.response.data.error ||
+            "An error occurred during signup. Please try again."
         );
       } else {
-        setErrorMessage(error.message || "An error occurred during signup. Please try again.");
+        setErrorMessage(
+          error.message || "An error occurred during signup. Please try again."
+        );
       }
     } finally {
       setIsLoading(false);

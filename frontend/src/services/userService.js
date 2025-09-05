@@ -1,5 +1,4 @@
-import { apiService } from './api';
-import { USER_ENDPOINTS } from '../constants/apiEndpoints';
+import { apiService } from "./api";
 
 /**
  * Service for handling user-related API calls
@@ -41,7 +40,10 @@ export const userService = {
    * @returns {Promise} Promise object representing the result of the operation
    */
   changePassword: async (passwordData) => {
-    const response = await apiService.put("/users/changepassword", passwordData);
+    const response = await apiService.put(
+      "/users/changepassword",
+      passwordData
+    );
     return response.data;
   },
 
@@ -62,9 +64,9 @@ export const userService = {
    */
   getAllUsers: async () => {
     try {
-      const response = await apiService.get('/users/admin/users');
+      const response = await apiService.get("/users/admin/users");
       console.log("getAllUsers raw response:", response);
-      
+
       // Handle different response structures
       if (response && response.success && Array.isArray(response.data)) {
         return response.data;
@@ -75,7 +77,7 @@ export const userService = {
       } else if (response && response.data) {
         return Array.isArray(response.data) ? response.data : [];
       }
-      
+
       console.warn("Unexpected response format:", response);
       return [];
     } catch (error) {
@@ -91,9 +93,12 @@ export const userService = {
    * @returns {Promise} Promise object representing the result of the operation
    */
   updateUserRole: async (username, role) => {
-    const response = await apiService.put(`/users/admin/user/${username}/role`, {
-      newRole: role,
-    });
+    const response = await apiService.put(
+      `/users/admin/user/${username}/role`,
+      {
+        newRole: role,
+      }
+    );
     return response.data;
   },
 
@@ -122,24 +127,24 @@ export const userService = {
       // If both fail, return a default user
       return {
         data: {
-          username: 'Anonymous',
-          userid: id
-        }
+          username: "Anonymous",
+          userid: id,
+        },
       };
     } catch (error) {
       console.error(`Error fetching user ${id}:`, error);
       // Return a default user object if the request fails
       return {
         data: {
-          username: 'Anonymous',
-          userid: id
-        }
+          username: "Anonymous",
+          userid: id,
+        },
       };
     }
   },
 
   createUser: async (userData) => {
-    return apiService.post('/users', userData);
+    return apiService.post("/users", userData);
   },
 
   updateUser: async (id, userData) => {
@@ -148,5 +153,82 @@ export const userService = {
 
   deleteUserById: async (id) => {
     return apiService.delete(`/users/${id}`);
-  }
+  },
+
+  /**
+   * Admin only: Perform bulk operations on users
+   * @param {string} action - The action to perform (activate, deactivate, delete)
+   * @param {Array} userIds - Array of user IDs to perform action on
+   * @returns {Promise} Promise object representing the result of the operation
+   */
+  bulkUserAction: async (action, userIds) => {
+    try {
+      const response = await apiService.post("/users/admin/users/bulk-action", {
+        action,
+        userIds,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error performing bulk action:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Admin only: Export users data
+   * @param {string} format - Export format (csv, json)
+   * @param {Object} filters - Filters to apply to the export
+   * @returns {Promise} Promise object representing the exported data
+   */
+  exportUsers: async (format = "csv", filters = {}) => {
+    try {
+      const queryParams = new URLSearchParams({
+        format,
+        filters: JSON.stringify(filters),
+      });
+
+      if (format === "csv") {
+        // For CSV, we need to handle the response as blob
+        const response = await fetch(
+          `${apiService.baseURL}/users/admin/users/export?${queryParams}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Export failed");
+        }
+
+        const blob = await response.blob();
+        return blob;
+      } else {
+        const response = await apiService.get(
+          `/users/admin/users/export?${queryParams}`
+        );
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Error exporting users:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Admin only: Get user analytics
+   * @returns {Promise} Promise object representing analytics data
+   */
+  getUserAnalytics: async () => {
+    try {
+      const response = await apiService.get("/users/admin/users/analytics");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user analytics:", error);
+      throw error;
+    }
+  },
 };

@@ -35,6 +35,8 @@ import FAQ from "../pages/FAQ";
 import AdminDashboard from "../pages/AdminDashboard";
 import UserManagementPage from "../pages/UserManagementPage";
 import DepartmentManagementPage from "../pages/DepartmentManagementPage";
+import ContentManagement from "../pages/admin/ContentManagement";
+import AdminLayout from "../components/layout/AdminLayout";
 
 const AppRoutes = () => {
   return (
@@ -42,7 +44,10 @@ const AppRoutes = () => {
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<Navigate to="/signup/student" replace />} />
+      <Route
+        path="/signup"
+        element={<Navigate to="/signup/student" replace />}
+      />
       <Route path="/signup/student" element={<StudentSignupPage />} />
       <Route path="/signup/teacher" element={<TeacherSignupPage />} />
       <Route path="/signup/admin" element={<AdminSignupPage />} />
@@ -79,12 +84,21 @@ const AppRoutes = () => {
         </Route>
       </Route>
 
-      {/* Admin Routes - No MainLayout wrapper */}
+      {/* Admin Routes with AdminLayout wrapper */}
       <Route element={<PrivateRoute allowedRoles={["ADMIN"]} />}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<UserManagementPage />} />
-        <Route path="/admin/departments" element={<DepartmentManagementPage />} />
-        <Route path="/admin/settings" element={<Settings />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<UserManagementPage />} />
+          <Route
+            path="/admin/departments"
+            element={<DepartmentManagementPage />}
+          />
+          <Route
+            path="/admin/content-management"
+            element={<ContentManagement />}
+          />
+          <Route path="/admin/settings" element={<Settings />} />
+        </Route>
       </Route>
 
       {/* Catch-all redirect for unknown routes */}

@@ -43,13 +43,20 @@ export async function updatePost(req, res) {
     const postid = parseInt(req.params.postid, 10);
     const { content, title, departmentid } = req.body;
     const { userid, usertype } = req.user;
-    
-    const post = await postService.updatePost(postid, userid, usertype, content, title, departmentid);
-    
+
+    const post = await postService.updatePost(
+      postid,
+      userid,
+      usertype,
+      content,
+      title,
+      departmentid
+    );
+
     if (!post.success) {
       return res.status(404).json(post);
     }
-    
+
     res.status(200).json({
       success: true,
       data: post.data,

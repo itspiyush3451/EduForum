@@ -5,28 +5,30 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const signUpSchema = z.object({
-  email: z.string().email(),
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(5, "Password must be at least 5 characters"),
-  usertype: z.enum(["STUDENT", "TEACHER", "ADMIN"], {
-    errorMap: () => ({ message: "Invalid user role" }),
-  }),
-  departmentid: z.number().nullable(),
-}).refine(
-  (data) => {
-    // For ADMIN, departmentid should be null
-    if (data.usertype === "ADMIN") {
-      return data.departmentid === null;
+const signUpSchema = z
+  .object({
+    email: z.string().email(),
+    username: z.string().min(1, "Username is required"),
+    password: z.string().min(5, "Password must be at least 5 characters"),
+    usertype: z.enum(["STUDENT", "TEACHER", "ADMIN"], {
+      errorMap: () => ({ message: "Invalid user role" }),
+    }),
+    departmentid: z.number().nullable(),
+  })
+  .refine(
+    (data) => {
+      // For ADMIN, departmentid should be null
+      if (data.usertype === "ADMIN") {
+        return data.departmentid === null;
+      }
+      // For STUDENT and TEACHER, departmentid should be a number greater than 0
+      return typeof data.departmentid === "number" && data.departmentid > 0;
+    },
+    {
+      message: "Department is required for students and teachers",
+      path: ["departmentid"],
     }
-    // For STUDENT and TEACHER, departmentid should be a number greater than 0
-    return typeof data.departmentid === 'number' && data.departmentid > 0;
-  },
-  {
-    message: "Department is required for students and teachers",
-    path: ["departmentid"]
-  }
-);
+  );
 
 const changePasswordSchema = z.object({
   oldPassword: z.string().min(5),
@@ -47,38 +49,75 @@ export async function signUp(
   try {
     // Ensure usertype is uppercase
     usertype = usertype.toUpperCase();
-    
+
+    // Handle departmentid conversion more carefully
+    let processedDepartmentId = null;
+    if (usertype !== "ADMIN") {
+      if (
+        departmentid === null ||
+        departmentid === undefined ||
+        departmentid === ""
+      ) {
+        return {
+          success: false,
+          message: "Department is required for students and teachers",
+        };
+      }
+      processedDepartmentId = Number(departmentid);
+      if (isNaN(processedDepartmentId) || processedDepartmentId <= 0) {
+        return {
+          success: false,
+          message: "Invalid department ID provided",
+        };
+      }
+    }
+
     // Prepare data for validation
     const signupData = {
       email: email.trim(),
       username: username.trim(),
       password: password,
       usertype: usertype,
-      departmentid: usertype === "ADMIN" ? null : Number(departmentid)
+      departmentid: processedDepartmentId,
     };
-    
+
     console.log("Signup data before validation:", signupData);
-    
+
     // Parse and validate the input
     const validatedData = signUpSchema.safeParse(signupData);
-    
+
     if (!validatedData.success) {
       console.error("Validation error:", validatedData.error);
-      return { 
-        success: false, 
-        message: validatedData.error.errors.map(err => err.message).join(", ")
+      console.error(
+        "Validation error details:",
+        JSON.stringify(validatedData.error.errors, null, 2)
+      );
+      return {
+        success: false,
+        message: validatedData.error.errors
+          .map((err) => `${err.path.join(".")}: ${err.message}`)
+          .join(", "),
       };
     }
-    
+
     console.log("Validated signup data:", validatedData.data);
 
     // Check if email already exists
-    const existingEmail = await prisma.user.findUnique({ 
-      where: { email: validatedData.data.email } 
+    const existingEmail = await prisma.user.findUnique({
+      where: { email: validatedData.data.email },
     });
-    
+
     if (existingEmail) {
       return { success: false, message: "Email already in use" };
+    }
+
+    // Check if username already exists
+    const existingUsername = await prisma.user.findUnique({
+      where: { username: validatedData.data.username },
+    });
+
+    if (existingUsername) {
+      return { success: false, message: "Username already taken" };
     }
 
     // Validate department for students and teachers
@@ -104,16 +143,16 @@ export async function signUp(
       },
     });
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: "User created successfully",
       user: {
         id: user.userid,
         email: user.email,
         username: user.username,
         usertype: user.usertype,
-        departmentid: user.departmentid
-      }
+        departmentid: user.departmentid,
+      },
     };
   } catch (error) {
     console.error("Error during sign-up:", error);
@@ -132,13 +171,40 @@ export async function signUp(
 
 export async function signIn(identifier, password) {
   try {
+    console.log("SignIn service called with identifier:", identifier);
+
     const user = await prisma.user.findFirst({
       where: {
         OR: [{ email: identifier }, { username: identifier }],
       },
     });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    console.log("User found:", !!user);
+    if (user) {
+      console.log("User details:", {
+        username: user.username,
+        email: user.email,
+        usertype: user.usertype,
+        hasPassword: !!user.password,
+        hasGoogleId: !!user.googleId,
+      });
+    }
+
+    if (!user) {
+      console.log("No user found with identifier:", identifier);
+      return { success: false, message: "Invalid email or password" };
+    }
+
+    if (!user.password) {
+      console.log("User has no password (likely Google user)");
+      return { success: false, message: "Use Google OAuth to log in" };
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    console.log("Password match:", passwordMatch);
+
+    if (!passwordMatch) {
+      console.log("Password does not match");
       return { success: false, message: "Invalid email or password" };
     }
 
@@ -146,12 +212,14 @@ export async function signIn(identifier, password) {
     if (user.googleId) {
       return { success: false, message: "Use Google OAuth to log in" };
     }
+
     const token = jwt.sign(
       { username: user.username, userType: user.usertype, userid: user.userid },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
+    console.log("Login successful, token generated");
     return { success: true, message: "Login successful", token };
   } catch (error) {
     console.error("Error during login:", error);

@@ -30,11 +30,14 @@ export const AuthProvider = ({ children }) => {
   const fetchUserProfile = async (token) => {
     try {
       console.log("Fetching user profile with token:", token);
-      const response = await axios.get("http://localhost:3000/api/users/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:3000/api/users/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("User profile response:", response.data);
       return response.data;
     } catch (error) {
@@ -59,9 +62,9 @@ export const AuthProvider = ({ children }) => {
         }
 
         // Decode the JWT token to get user information
-        const tokenParts = token.split('.');
+        const tokenParts = token.split(".");
         const payload = JSON.parse(atob(tokenParts[1]));
-        
+
         // Check if token is expired
         const expirationTime = payload.exp * 1000; // Convert to milliseconds
         if (Date.now() >= expirationTime) {
@@ -71,14 +74,15 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
           return;
         }
-        
+
         // Try to fetch user profile data
         const profileData = await fetchUserProfile(token);
-        
+
         if (profileData?.success) {
           const userData = {
             id: profileData.data.userid || payload.userid || "unknown",
-            username: profileData.data.username || payload.username || "unknown",
+            username:
+              profileData.data.username || payload.username || "unknown",
             usertype: profileData.data.usertype || payload.userType || "ADMIN",
             role: profileData.data.usertype || payload.userType || "ADMIN",
             departmentid: Number(profileData.data.departmentid),
@@ -116,23 +120,23 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       const response = await authService.login(credentials);
       console.log("Login response data:", response);
-      
+
       // Extract token and ensure usertype is consistent with what's in the token
       const token = response.token;
 
       if (token) {
         localStorage.setItem("token", token);
-        
+
         // Try to fetch user profile data first
         const profileData = await fetchUserProfile(token);
         console.log("Profile data from API:", profileData);
-        
+
         // Decode the JWT token to get user information
-        const tokenParts = token.split('.');
+        const tokenParts = token.split(".");
         const payload = JSON.parse(atob(tokenParts[1]));
         console.log("Complete token on login:", token);
         console.log("Complete decoded token payload on login:", payload);
-        
+
         if (!profileData?.success) {
           console.error("Failed to fetch user profile:", profileData);
           // If profile fetch fails, try to use token data
@@ -144,14 +148,14 @@ export const AuthProvider = ({ children }) => {
             departmentid: null, // We'll need to fetch this later
             token: token,
           };
-          
+
           console.log("Fallback user data from token:", userData);
           setUser(userData);
           localStorage.setItem("user_data", JSON.stringify(userData));
-          
-          if(userData.usertype === "ADMIN"){
+
+          if (userData.usertype === "ADMIN") {
             navigate("/admin");
-          }else{
+          } else {
             navigate("/dashboard");
           }
           return { ...response, user: userData };
@@ -160,21 +164,24 @@ export const AuthProvider = ({ children }) => {
         // Use profile data if available
         const userData = {
           id: profileData.data.userid || payload.userid || "unknown",
-          username: profileData.data.username || payload.username || credentials.identifier,
+          username:
+            profileData.data.username ||
+            payload.username ||
+            credentials.identifier,
           usertype: profileData.data.usertype || payload.userType || "ADMIN",
           role: profileData.data.usertype || payload.userType || "ADMIN",
           departmentid: Number(profileData.data.departmentid),
           token: token,
         };
-        
+
         console.log("Final user data being set:", userData);
 
         setUser(userData);
         localStorage.setItem("user_data", JSON.stringify(userData));
-        
-        if(userData.usertype === "ADMIN"){
+
+        if (userData.usertype === "ADMIN") {
           navigate("/admin");
-        }else{
+        } else {
           navigate("/dashboard");
         }
         return { ...response, user: userData };
@@ -297,7 +304,8 @@ export const AuthProvider = ({ children }) => {
     console.log("user.role:", user?.role);
     console.log("user.usertype:", user?.usertype);
     console.log("USER_ROLES.ADMIN:", USER_ROLES.ADMIN);
-    const isAdminUser = user?.role === USER_ROLES.ADMIN || user?.usertype === USER_ROLES.ADMIN;
+    const isAdminUser =
+      user?.role === USER_ROLES.ADMIN || user?.usertype === USER_ROLES.ADMIN;
     console.log("isAdmin result:", isAdminUser);
     return isAdminUser;
   }, [user]);

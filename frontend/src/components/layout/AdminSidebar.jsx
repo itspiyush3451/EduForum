@@ -17,23 +17,36 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
     <Link
       to={path}
       className={`flex items-center px-4 py-3 rounded-lg transition-all duration-300 group relative
-        ${isActive(path) 
-          ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg" 
-          : "text-gray-300 hover:bg-gray-700/70 hover:text-white"
+        ${
+          isActive(path)
+            ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg"
+            : "text-gray-300 hover:bg-gray-700/70 hover:text-white"
         }
         ${hoveredItem === label ? "translate-x-1" : ""}
       `}
       onMouseEnter={() => setHoveredItem(label)}
       onMouseLeave={() => setHoveredItem(null)}
     >
-      <div className={`transition-all duration-300 ${hoveredItem === label && !isActive(path) ? "text-blue-400" : ""}`}>
+      <div
+        className={`transition-all duration-300 ${
+          hoveredItem === label && !isActive(path) ? "text-blue-400" : ""
+        }`}
+      >
         {icon}
       </div>
-      <span className={`transition-all duration-300 ${isCollapsed ? "opacity-0 w-0 absolute" : "opacity-100 ml-3"}`}>
+      <span
+        className={`transition-all duration-300 ${
+          isCollapsed ? "opacity-0 w-0 absolute" : "opacity-100 ml-3"
+        }`}
+      >
         {label}
       </span>
       {badge && (
-        <span className={`absolute right-3 px-2 py-1 text-xs font-bold rounded-full bg-red-500 text-white transition-opacity ${isCollapsed ? "opacity-0" : "opacity-100"}`}>
+        <span
+          className={`absolute right-3 px-2 py-1 text-xs font-bold rounded-full bg-red-500 text-white transition-opacity ${
+            isCollapsed ? "opacity-0" : "opacity-100"
+          }`}
+        >
           {badge}
         </span>
       )}
@@ -47,7 +60,9 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const DashboardIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-5 h-5 transition-transform duration-300 ${hoveredItem === "Dashboard" ? "scale-110" : ""}`}
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Dashboard" ? "scale-110" : ""
+      }`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -64,7 +79,9 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const UsersIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-5 h-5 transition-transform duration-300 ${hoveredItem === "Users" ? "scale-110" : ""}`}
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Users" ? "scale-110" : ""
+      }`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -81,7 +98,9 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const DepartmentsIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-5 h-5 transition-transform duration-300 ${hoveredItem === "Departments" ? "scale-110" : ""}`}
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Departments" ? "scale-110" : ""
+      }`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -98,7 +117,9 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const SettingsIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-5 h-5 transition-transform duration-300 ${hoveredItem === "Settings" ? "scale-110" : ""}`}
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Settings" ? "scale-110" : ""
+      }`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -121,7 +142,9 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const ReportsIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-5 h-5 transition-transform duration-300 ${hoveredItem === "Reports" ? "scale-110" : ""}`}
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Reports" ? "scale-110" : ""
+      }`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -138,7 +161,9 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
   const NotificationsIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-5 h-5 transition-transform duration-300 ${hoveredItem === "Notifications" ? "scale-110" : ""}`}
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Notifications" ? "scale-110" : ""
+      }`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -152,9 +177,28 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
     </svg>
   );
 
+  const ContentManagementIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={`w-5 h-5 transition-transform duration-300 ${
+        hoveredItem === "Content Management" ? "scale-110" : ""
+      }`}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+      />
+    </svg>
+  );
+
   return (
     <div
-      className={`bg-gradient-to-b from-gray-900 to-gray-800 text-white h-screen ${
+      className={`admin-sidebar bg-gradient-to-b from-gray-900 to-gray-800 text-white h-screen ${
         isCollapsed ? "w-16" : "w-64"
       } pt-6 transition-all duration-300 ease-in-out overflow-hidden fixed left-0 top-16 z-10 shadow-xl`}
       onMouseEnter={() => setIsCollapsed(false)}
@@ -163,10 +207,14 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
       <div className={`px-4 mb-8 ${isCollapsed ? "hidden" : "block"}`}>
         <div className="flex items-center">
           <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
-            <span className="text-lg font-bold">{user?.username?.charAt(0).toUpperCase() || "A"}</span>
+            <span className="text-lg font-bold">
+              {user?.username?.charAt(0).toUpperCase() || "A"}
+            </span>
           </div>
           <div className="ml-3">
-            <p className="text-sm font-medium text-white">{user?.username || "Admin"}</p>
+            <p className="text-sm font-medium text-white">
+              {user?.username || "Admin"}
+            </p>
             <p className="text-xs text-gray-400">Administrator</p>
           </div>
         </div>
@@ -176,22 +224,56 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
       <div className="space-y-1 px-2">
         <NavItem icon={<DashboardIcon />} path="/admin" label="Dashboard" />
         <NavItem icon={<UsersIcon />} path="/admin/users" label="Users" />
-        <NavItem icon={<DepartmentsIcon />} path="/admin/departments" label="Departments" badge="2" />
-        <NavItem icon={<SettingsIcon />} path="/admin/settings" label="Settings" />
+        <NavItem
+          icon={<DepartmentsIcon />}
+          path="/admin/departments"
+          label="Departments"
+          badge="2"
+        />
+        <NavItem
+          icon={<ContentManagementIcon />}
+          path="/admin/content-management"
+          label="Content Management"
+        />
+        <NavItem
+          icon={<SettingsIcon />}
+          path="/admin/settings"
+          label="Settings"
+        />
         <NavItem icon={<ReportsIcon />} path="/admin/reports" label="Reports" />
-        <NavItem icon={<NotificationsIcon />} path="/admin/notifications" label="Notifications" badge="3" />
+        <NavItem
+          icon={<NotificationsIcon />}
+          path="/admin/notifications"
+          label="Notifications"
+          badge="3"
+        />
       </div>
 
       {/* Sidebar Footer */}
-      <div className={`absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800 ${isCollapsed ? "hidden" : ""}`}>
+      <div
+        className={`absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800 ${
+          isCollapsed ? "hidden" : ""
+        }`}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
             <span className="text-xs text-gray-400">System Online</span>
           </div>
           <button className="p-1 rounded hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           </button>
         </div>

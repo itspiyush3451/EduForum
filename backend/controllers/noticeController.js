@@ -35,18 +35,18 @@ export const createNotice = async (req, res) => {
 export const getAllNotices = async (req, res) => {
   try {
     const result = await getAllNoticesService(req.user.userid);
-    
+
     if (!result.success) {
       return res.status(500).json(result);
     }
-    
+
     res.json(result.data);
   } catch (error) {
     console.error("Error fetching notices:", error);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: "Error fetching notices",
-      error: error.message 
+      error: error.message,
     });
   }
 };
@@ -100,34 +100,34 @@ export const deleteNotice = async (req, res) => {
 export const downloadAttachment = async (req, res) => {
   try {
     const { noticeId, filename } = req.params;
-    
+
     // Construct the file path
     const filePath = path.join(__dirname, "../uploads", filename);
-    
+
     // Check if file exists
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({
         success: false,
-        message: "File not found"
+        message: "File not found",
       });
     }
 
     // Set appropriate headers for file download
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("Content-Type", "application/octet-stream");
 
     // Stream the file to response
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
 
     // Handle stream errors
-    fileStream.on('error', (err) => {
+    fileStream.on("error", (err) => {
       console.error("Error streaming file:", err);
       if (!res.headersSent) {
         res.status(500).json({
           success: false,
           message: "Error streaming file",
-          error: err.message
+          error: err.message,
         });
       }
     });
@@ -137,7 +137,7 @@ export const downloadAttachment = async (req, res) => {
       res.status(500).json({
         success: false,
         message: "Failed to download attachment",
-        error: error.message
+        error: error.message,
       });
     }
   }

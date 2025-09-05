@@ -28,35 +28,41 @@ export const authService = {
         username: userData.username.trim(),
         password: userData.password,
         usertype: userData.usertype.toUpperCase(),
-        departmentid: userData.usertype.toUpperCase() === 'ADMIN' ? null : Number(userData.departmentid)
+        departmentid:
+          userData.usertype.toUpperCase() === "ADMIN"
+            ? null
+            : Number(userData.departmentid),
       };
 
       // Validate departmentid for non-admin users
-      if (apiData.usertype !== 'ADMIN' && (isNaN(apiData.departmentid) || apiData.departmentid <= 0)) {
-        throw new Error('Invalid department ID');
+      if (
+        apiData.usertype !== "ADMIN" &&
+        (isNaN(apiData.departmentid) || apiData.departmentid <= 0)
+      ) {
+        throw new Error("Invalid department ID");
       }
 
       console.log("Signup data being sent:", apiData);
       const response = await apiService.post(AUTH_ENDPOINTS.SIGNUP, apiData);
-      
+
       // Check if we have a valid response
       if (!response) {
-        throw new Error('No response received from server');
+        throw new Error("No response received from server");
       }
 
       // The response might be in response.data or directly in response
       const responseData = response.data || response;
-      
+
       if (!responseData) {
-        throw new Error('No response data received from server');
+        throw new Error("No response data received from server");
       }
 
       console.log("Signup response:", responseData);
-      
+
       if (responseData.token) {
         setAuthToken(responseData.token);
       }
-      
+
       return responseData;
     } catch (error) {
       console.error("Signup error:", error);
@@ -64,7 +70,7 @@ export const authService = {
         console.error("Error response data:", error.response.data);
         console.error("Error response status:", error.response.status);
         console.error("Error response headers:", error.response.headers);
-        
+
         // If we have a specific error message from the backend, use it
         if (error.response.data && error.response.data.message) {
           throw new Error(error.response.data.message);

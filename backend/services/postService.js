@@ -59,7 +59,14 @@ export async function createPost(content, userid, departmentid) {
   }
 }
 
-export async function updatePost(postid, userid, usertype, content, title, departmentid) {
+export async function updatePost(
+  postid,
+  userid,
+  usertype,
+  content,
+  title,
+  departmentid
+) {
   try {
     const post = await prisma.post.findUnique({
       where: { postid },
@@ -70,7 +77,11 @@ export async function updatePost(postid, userid, usertype, content, title, depar
     }
 
     // Check authorization
-    if (post.userid !== userid && usertype !== "ADMIN" && usertype !== "TEACHER") {
+    if (
+      post.userid !== userid &&
+      usertype !== "ADMIN" &&
+      usertype !== "TEACHER"
+    ) {
       return { success: false, message: "Unauthorized to update this post" };
     }
 
@@ -139,7 +150,7 @@ export async function getUserPosts(userid) {
     const userPosts = await prisma.post.findMany({
       where: { userid },
       include: { user: { select: { username: true } } },
-      orderBy: { timestamp: 'desc' }
+      orderBy: { timestamp: "desc" },
     });
 
     return { success: true, data: userPosts };
@@ -153,7 +164,7 @@ export async function getAllPosts() {
   try {
     const posts = await prisma.post.findMany({
       include: { user: { select: { username: true } } },
-      orderBy: { timestamp: 'desc' }
+      orderBy: { timestamp: "desc" },
     });
 
     return { success: true, data: posts };

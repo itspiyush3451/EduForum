@@ -106,33 +106,44 @@ export async function getAllNotices(userid) {
     // Get user's department
     const user = await prisma.user.findUnique({
       where: { userid },
-      select: { departmentid: true }
+      select: { departmentid: true },
     });
 
     if (!user) {
       return { success: false, message: "User not found" };
     }
 
+    // Build the where clause conditionally
+    const whereClause = {};
+
+    // Only filter by department if user has a departmentid
+    if (user.departmentid !== null && user.departmentid !== undefined) {
+      whereClause.departmentid = user.departmentid;
+    }
+    // If user has no department, show all notices (no department filter)
+
     const notices = await prisma.notice.findMany({
-      where: {
-        departmentid: user.departmentid
-      },
+      where: whereClause,
       include: {
         user: {
           select: {
             username: true,
-            userid: true
-          }
-        }
+            userid: true,
+          },
+        },
       },
       orderBy: {
-        timestamp: 'desc'
-      }
+        timestamp: "desc",
+      },
     });
     return { success: true, data: notices };
   } catch (error) {
     console.error("Error in getAllNotices:", error);
-    return { success: false, message: "Error fetching notices", error: error.message };
+    return {
+      success: false,
+      message: "Error fetching notices",
+      error: error.message,
+    };
   }
 }
 

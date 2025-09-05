@@ -16,7 +16,7 @@ export const postService = {
       if (!token) {
         throw { message: "Please log in to create a post" };
       }
-      
+
       const response = await axios.post(POST_ENDPOINTS.CREATE_POST, postData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,9 +32,16 @@ export const postService = {
       if (error.response?.status === 401) {
         throw { message: "Your session has expired. Please log in again." };
       } else if (error.response?.status === 403) {
-        throw { message: "You don't have permission to create posts in this department" };
+        throw {
+          message:
+            "You don't have permission to create posts in this department",
+        };
       } else if (error.response?.status === 400) {
-        throw { message: error.response.data.message || "Invalid post data. Please check your input." };
+        throw {
+          message:
+            error.response.data.message ||
+            "Invalid post data. Please check your input.",
+        };
       }
       throw error.response?.data || error;
     }
@@ -53,17 +60,17 @@ export const postService = {
         throw { message: "Please log in to update the post" };
       }
 
-      console.log('Updating post with ID:', postId);
-      console.log('Update data:', postData);
+      console.log("Updating post with ID:", postId);
+      console.log("Update data:", postData);
 
       // Include all necessary fields in the update data
       const updateData = {
         content: postData.content,
         title: postData.title,
-        departmentid: postData.departmentid
+        departmentid: postData.departmentid,
       };
 
-      console.log('Sending update request with data:', updateData);
+      console.log("Sending update request with data:", updateData);
 
       // Perform the update
       const updateResponse = await axios.put(
@@ -72,12 +79,12 @@ export const postService = {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
         }
       );
 
-      console.log('Update response:', updateResponse.data);
+      console.log("Update response:", updateResponse.data);
 
       if (!updateResponse.data) {
         throw { message: "Failed to update post" };
@@ -93,7 +100,7 @@ export const postService = {
         updatedPost = updateResponse.data;
       }
 
-      console.log('Processed updated post:', updatedPost);
+      console.log("Processed updated post:", updatedPost);
       return updatedPost;
     } catch (error) {
       console.error("Error updating post:", error);
@@ -104,7 +111,11 @@ export const postService = {
       } else if (error.response?.status === 404) {
         throw { message: "Post not found" };
       } else if (error.response?.status === 400) {
-        throw { message: error.response.data.message || "Invalid post data. Please check your input." };
+        throw {
+          message:
+            error.response.data.message ||
+            "Invalid post data. Please check your input.",
+        };
       }
       throw error.response?.data || error;
     }
@@ -135,7 +146,11 @@ export const postService = {
       } else if (error.response?.status === 404) {
         throw { message: "Post not found" };
       }
-      throw error.response?.data || { message: "Failed to delete post. Please try again." };
+      throw (
+        error.response?.data || {
+          message: "Failed to delete post. Please try again.",
+        }
+      );
     }
   },
 
@@ -161,7 +176,7 @@ export const postService = {
       } else {
         posts = Array.isArray(response.data) ? response.data : [];
       }
-      
+
       // Remove the department filtering here since we want to show all posts
       // and let the frontend handle the filtering
       return posts;
@@ -189,10 +204,10 @@ export const postService = {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       // Log the response for debugging
-      console.log('getUserPosts response:', response.data);
-      
+      console.log("getUserPosts response:", response.data);
+
       // Handle different response structures
       if (response.data && response.data.success) {
         return Array.isArray(response.data.data) ? response.data.data : [];
@@ -234,7 +249,7 @@ export const postService = {
       }
 
       // If the response has a success property, return the data property
-      if (response.data.hasOwnProperty('success')) {
+      if (response.data.hasOwnProperty("success")) {
         if (!response.data.success) {
           throw { message: response.data.message || "Failed to fetch post" };
         }
@@ -264,12 +279,15 @@ export const postService = {
       if (!token) {
         throw { message: "Authentication token not found" };
       }
-      const response = await axios.get(DEPARTMENT_ENDPOINTS.GET_ALL_DEPARTMENTS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      
+      const response = await axios.get(
+        DEPARTMENT_ENDPOINTS.GET_ALL_DEPARTMENTS,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       // Handle both array and object response structures
       if (response.data && response.data.success) {
         return Array.isArray(response.data.data) ? response.data.data : [];

@@ -1,0 +1,88 @@
+/* Admin Interface Fixes */
+
+/* Ensure proper scrolling in admin layout */
+.admin-main-content {
+  height: calc(100vh - 4rem); /* Account for navbar height */
+  overflow-y: auto;
+}
+
+/* Fix sidebar z-index issues */
+.admin-sidebar {
+  z-index: 20;
+}
+
+.admin-navbar {
+  z-index: 30;
+}
+
+/* Ensure tables are properly responsive */
+.admin-table-container {
+  min-width: 100%;
+  overflow-x: auto;
+}
+
+/* Fix checkbox styling in dark theme */
+.admin-checkbox {
+  background-color: #374151;
+  border-color: #6b7280;
+  color: #3b82f6;
+}
+
+.admin-checkbox:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+/* Fix select dropdowns in dark theme */
+.admin-select option {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+/* Ensure proper spacing between admin components */
+.admin-content-section {
+  margin-bottom: 1.5rem;
+}
+
+/* Fix hover states for dark theme */
+.admin-table-row:hover {
+  background-color: #374151 !important;
+}
+
+/* Ensure proper button spacing */
+.admin-action-buttons {
+  gap: 0.5rem;
+}
+
+/* Fix modal positioning if any */
+.admin-modal {
+  z-index: 50;
+}
+
+/* Responsive fixes for mobile */
+@media (max-width: 768px) {
+  .admin-main-content {
+    margin-left: 0 !important;
+    padding: 1rem;
+  }
+
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Fix text selection in dark theme */
+::selection {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Ensure proper focus states */
+.admin-focus:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

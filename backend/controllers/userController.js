@@ -10,8 +10,13 @@ import {
 export async function handleSignUp(req, res) {
   try {
     const { email, username, password, usertype, departmentid } = req.body;
-    console.log("Signup request data:", { email, username, usertype, departmentid });
-    
+    console.log("Signup request data:", {
+      email,
+      username,
+      usertype,
+      departmentid,
+    });
+
     const result = await signUp(
       email,
       username,
@@ -19,30 +24,46 @@ export async function handleSignUp(req, res) {
       usertype,
       departmentid
     );
-    
+
     console.log("Signup result:", result);
-    
+
     if (!result) {
       return res.status(500).json({
         success: false,
-        message: "No response received from signup service"
+        message: "No response received from signup service",
       });
     }
-    
+
     res.status(result.success ? 201 : 400).json(result);
   } catch (error) {
     console.error("Signup controller error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "An error occurred during sign-up"
+      message: error.message || "An error occurred during sign-up",
     });
   }
 }
 
 // Controller function to handle user sign-in
 export async function handleSignIn(req, res) {
+  console.log("Login attempt with data:", req.body);
   const { identifier, password } = req.body;
+
+  if (!identifier || !password) {
+    console.log(
+      "Missing credentials - identifier:",
+      !!identifier,
+      "password:",
+      !!password
+    );
+    return res.status(400).json({
+      success: false,
+      message: "Username/email and password are required",
+    });
+  }
+
   const result = await signIn(identifier, password);
+  console.log("Login result:", result);
   res.status(result.success ? 200 : 401).json(result);
 }
 

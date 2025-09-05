@@ -57,8 +57,13 @@ export async function updateComment(req, res) {
     const userid = req.user.userid;
     const usertype = req.user.usertype;
 
-    const result = await commentService.updateComment(commentid, userid, usertype, content);
-    
+    const result = await commentService.updateComment(
+      commentid,
+      userid,
+      usertype,
+      content
+    );
+
     if (!result.success) {
       return res.status(400).json(result);
     }
@@ -80,8 +85,12 @@ export async function deleteComment(req, res) {
     const userid = req.user.userid;
     const usertype = req.user.usertype;
 
-    const result = await commentService.deleteComment(commentid, userid, usertype);
-    
+    const result = await commentService.deleteComment(
+      commentid,
+      userid,
+      usertype
+    );
+
     if (!result.success) {
       return res.status(400).json(result);
     }
@@ -100,13 +109,13 @@ export async function getCommentsByPostId(req, res) {
 
     res.json({
       success: true,
-      comments: comments
+      comments: comments,
     });
   } catch (error) {
     console.error("Error fetching comments by postId:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: "Error fetching comments by postId" 
+      message: "Error fetching comments by postId",
     });
   }
 }
